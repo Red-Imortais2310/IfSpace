@@ -1,0 +1,597 @@
+/* Importação de variáveis e fontes do arquivo principal */
+@import url('style.css'); 
+
+/* ------------------------------------- */
+/* 0. Configurações Globais do Feed */
+/* ------------------------------------- */
+
+body {
+    background-color: #f0f2f5; 
+    margin: 0;
+    padding-top: 56px; 
+}
+
+.logo-image {
+    /* Ajusta a altura da imagem para preencher a navegação (56px - padding) */
+    height: 40px; 
+    width: auto;
+    margin-top: 5px; /* Pequeno ajuste vertical se necessário */
+}
+
+/* ------------------------------------- */
+/* 1. BARRA DE NAVEGAÇÃO SUPERIOR */
+/* ------------------------------------- */
+
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+    height: 56px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+}
+
+/* Esquerda (Logo e Busca) */
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-box {
+    background-color: #f0f2f5;
+    border-radius: 20px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    width: 240px;
+}
+
+.search-box i {
+    color: var(--color-medium-gray);
+    margin-right: 8px;
+}
+
+.search-box input {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 15px;
+    width: 100%;
+}
+
+/* Centro (Ícones de Navegação) */
+.nav-center {
+    display: flex;
+    flex: 1;
+    max-width: 600px;
+    justify-content: space-around;
+    height: 100%;
+}
+
+.nav-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 120px;
+    color: #606770;
+    border-bottom: 3px solid transparent;
+    transition: border-bottom 0.2s, color 0.2s;
+}
+
+.nav-icon:hover {
+    background-color: #f0f2f5;
+    border-radius: 8px;
+}
+
+.nav-icon.active {
+    color: var(--color-primary-green); /* Icone ativo em verde */
+    border-bottom: 3px solid var(--color-primary-green);
+}
+
+/* Direita (Perfil e Menus) */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-menu-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #e4e6eb;
+    color: var(--color-text);
+    font-size: 14px;
+}
+
+.profile-pic {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.profile-pic img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ------------------------------------- */
+/* 2. LAYOUT PRINCIPAL (3 COLUNAS) */
+/* ------------------------------------- */
+
+.feed-container {
+    display: flex;
+    max-width: 1300px;
+    margin: 20px auto;
+    padding: 0 16px;
+    gap: 16px;
+}
+
+/* COLUNA ESQUERDA - Sidebar */
+.left-sidebar {
+    width: 250px;
+    position: sticky;
+    top: 76px; /* Abaixo da barra de navegação */
+    height: calc(100vh - 76px);
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 4px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--color-text);
+    transition: background-color 0.2s;
+    font-size: 15px;
+}
+
+.sidebar-item i {
+    width: 24px;
+    margin-right: 12px;
+    font-size: 20px;
+    color: var(--color-primary-blue); /* Ícones em azul padrão */
+}
+
+.sidebar-item:hover {
+    background-color: #e4e6eb;
+}
+
+.profile-link img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 12px;
+}
+
+/* COLUNA CENTRAL - Feed Principal */
+.main-content {
+    flex-grow: 1;
+    max-width: 600px;
+    min-width: 450px;
+}
+
+/* COLUNA DIREITA - Widgets e Contatos */
+.right-sidebar {
+    width: 300px;
+    position: sticky;
+    top: 76px;
+    height: calc(100vh - 76px);
+    overflow-y: auto;
+    padding-left: 8px;
+}
+
+.widget-title {
+    color: #65676b;
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border-radius: 8px;
+}
+
+.contact-item:hover {
+    background-color: #e4e6eb;
+}
+
+.contact-list .profile-pic {
+    margin-right: 10px;
+    position: relative;
+}
+
+/* Indicador Online */
+.profile-pic.online::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    background-color: var(--color-success); /* Cor verde do IfSpace */
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+}
+
+/* ------------------------------------- */
+/* 3. COMPONENTES DO FEED CENTRAL */
+/* ------------------------------------- */
+
+/* STORIES */
+.story-section {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.story {
+    width: 110px;
+    height: 180px;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+    background-color: #ffffff;
+}
+
+.story img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.8);
+}
+
+.story span {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 13px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+.create-story {
+  margin-bottom: 20px;
+}
+
+#createStoryInput {
+  padding: 10px 16px;
+  font-size: 16px;
+  background-color: var(--color-primary-blue);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#storyInputArea {
+  margin-top: 10px;
+}
+
+#storyInput {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid var(--color-light-gray);
+  border-radius: 6px;
+}
+
+.thumbnail img {
+  max-width: 120px;
+  margin-top: 10px;
+  border-radius: 4px;
+}
+
+.hidden {
+  display: none;
+}
+
+
+.create-story {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: #ffffff;
+    transition: none;
+}
+
+.create-story img {
+    height: 70%;
+    width: 100%;
+    object-fit: cover;
+    filter: brightness(1);
+    border-radius: 12px 12px 0 0;
+}
+
+.create-story i {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ffffff;
+    background-color: var(--color-primary-green); /* Ícone de + em verde */
+    border-radius: 50%;
+    padding: 6px;
+    font-size: 16px;
+    border: 3px solid #ffffff;
+}
+
+.create-story span {
+    position: static;
+    color: var(--color-text);
+    margin: 8px 0;
+    font-size: 13px;
+}
+
+
+/* ÁREA DE PUBLICAÇÃO */
+.post-composer {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 12px 16px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+}
+
+.composer-top {
+    display: flex;
+    align-items: center;
+    padding-bottom: 12px;
+}
+
+.composer-top img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.composer-top input {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border: none;
+    background-color: #f0f2f5;
+    border-radius: 20px;
+    outline: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s;
+}
+
+.composer-top input:hover {
+    background-color: #e4e6eb;
+}
+
+.composer-bottom {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 8px;
+}
+
+.composer-btn {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    color: #606770;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.composer-btn i {
+    margin-right: 8px;
+    font-size: 18px;
+}
+
+.composer-btn .red { color: #f02849; }
+.composer-btn .green { color: var(--color-primary-green); } /* Ícone de Foto/Vídeo em verde */
+.composer-btn .yellow { color: #f7b928; }
+
+.composer-btn:hover {
+    background-color: #f0f2f5;
+}
+
+/* POSTS */
+.post-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    margin-bottom: 16px;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    position: relative;
+}
+
+.post-header img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.post-author {
+    font-weight: 600;
+    color: var(--color-text);
+    display: block;
+    line-height: 1.3;
+}
+
+.post-time {
+    font-size: 13px;
+    color: #606770;
+}
+
+.post-options {
+    position: absolute;
+    right: 16px;
+    color: #606770;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.post-body {
+    padding: 0 16px 12px;
+}
+
+.post-body p {
+    margin-bottom: 10px;
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+.post-body img {
+    width: 100%;
+    max-height: 450px;
+    object-fit: contain;
+    margin-top: 8px;
+}
+
+.post-footer {
+    padding: 8px 16px 0;
+    border-top: 1px solid #f0f2f5;
+}
+
+.post-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: #606770;
+    padding-bottom: 8px;
+}
+
+.post-actions {
+    display: flex;
+    justify-content: space-around;
+    border-top: 1px solid #f0f2f5;
+    padding: 4px 0;
+}
+
+.post-actions button {
+    flex-grow: 1;
+    background: none;
+    border: none;
+    color: #606770;
+    padding: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+}
+
+.post-actions button:hover {
+    background-color: #f0f2f5;
+}
+
+.post-actions i {
+    margin-right: 4px;
+}
+
+
+/* ------------------------------------- */
+/* 4. RESPONSIVIDADE (Ajuste o layout) */
+/* ------------------------------------- */
+
+@media (max-width: 1100px) {
+    .right-sidebar {
+        display: none; /* Esconde a sidebar da direita em telas menores */
+    }
+    .feed-container {
+        max-width: 900px;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 900px) {
+    .left-sidebar {
+        width: 60px; /* Minimiza a sidebar da esquerda */
+    }
+    .left-sidebar span, .left-sidebar .see-more {
+        display: none; /* Esconde o texto */
+    }
+    .left-sidebar .sidebar-item {
+        justify-content: center;
+    }
+    .left-sidebar .sidebar-item i {
+        margin-right: 0;
+    }
+
+    .main-content {
+        max-width: 500px;
+        min-width: 300px;
+    }
+
+    .nav-left .search-box {
+        display: none; /* Esconde a caixa de busca */
+    }
+}
+
+@media (max-width: 600px) {
+   .top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+    height: 56px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+}
+    .nav-right {
+        gap: 4px;
+    }
+    .nav-center {
+        display: none; /* Esconde navegação central no celular */
+    }
+    .left-sidebar {
+        display: none; /* Esconde a sidebar esquerda no celular */
+    }
+    .feed-container {
+        padding: 0 8px;
+    }
+    .main-content {
+        width: 100%;
+        max-width: none;
+    }
+    .story-section {
+        overflow-x: scroll;
+        padding-bottom: 5px; /* Evita que a barra de rolagem corte */
+    }
+}

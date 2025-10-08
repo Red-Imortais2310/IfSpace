@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IfSpace | Feed</title>
+    <link rel="stylesheet" href="feed.css"> 
+    <link rel="stylesheet" href="style.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+  <header class="top-nav">
+    <div class="nav-left">
+        <a href="feed.html" class="logo-link">
+            <img src="imagens/iflogo.png" alt="IfSpace Logo" class="logo-image">
+        </a>
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Pesquisar no IfSpace">
+        </div>
+    </div>
+    </header>
+
+    <div class="feed-container">
+        
+        <div class="left-sidebar">
+            <div class="sidebar-item profile-link">
+                <img src="imagens/euPerfil.jpeg" alt="Perfil">
+                <span>Agenor Filho</span>
+            </div>
+            <a href="#" class="sidebar-item"><i class="fas fa-user-friends"></i> Amigos</a>
+            <a href="#" class="sidebar-item"><i class="fas fa-history"></i> Lembranças</a>
+            <a href="#" class="sidebar-item"><i class="fas fa-flag"></i> Páginas</a>
+            <a href="#" class="sidebar-item"><i class="fas fa-calendar-alt"></i> Eventos</a>
+            <a href="#" class="sidebar-item"><i class="fas fa-bookmark"></i> Salvos</a>
+            <div class="divider"></div>
+            <a href="#" class="sidebar-item see-more">Ver mais <i class="fas fa-chevron-down"></i></a>
+        </div>
+
+        <div class="main-content">
+            
+            <div class="story-section">
+                <div class="story create-story">
+                    <img src="placeholder-profile.png" alt="Criar Story">
+                    <i class="fas fa-plus"></i>
+                    <span>Criar Story</span>
+                </div>
+                <div class="story"><img src="placeholder-story1.jpg" alt="Story 1"><span>Amigo 1</span></div>
+                <div class="story"><img src="placeholder-story2.jpg" alt="Story 2"><span>Amigo 2</span></div>
+                <div class="story"><img src="placeholder-story3.jpg" alt="Story 3"><span>Amigo 3</span></div>
+            </div>
+            <div class="create-story">
+  <button id="openStoryInput">Criar Story</button>
+  <div id="storyInputArea" class="hidden">
+    <input type="text" id="storyInput" placeholder="Digite um texto ou cole um link de vídeo..." />
+    <div id="videoPreview" class="thumbnail"></div>
+  </div>
+</div>
+
+<div id="storyFeed"></div>
+
+
+            <div class="post-composer">
+                <div class="composer-top">
+                    <img src="placeholder-profile.png" alt="Perfil">
+                    <input type="text" placeholder="O que você está pensando, Nome?">
+                </div>
+                <div class="divider"></div>
+                <div class="composer-bottom">
+                    <button class="composer-btn"><i class="fas fa-video red"></i> Vídeo ao Vivo</button>
+                    <button class="composer-btn"><i class="fas fa-images green"></i> Foto/Vídeo</button>
+                    <button class="composer-btn"><i class="fas fa-smile yellow"></i> Sentimento/Atividade</button>
+                </div>
+            </div>
+            
+            <div class="post-card">
+                <div class="post-header">
+                    <img src="placeholder-friend.png" alt="Autor">
+                    <div>
+                        <span class="post-author">Amigo IfSpace</span>
+                        <span class="post-time">2 horas atrás · <i class="fas fa-globe-americas"></i></span>
+                    </div>
+                    <i class="fas fa-ellipsis-h post-options"></i>
+                </div>
+                <div class="post-body">
+                    <p>Adorando o novo design do IfSpace! As cores estão incríveis. 💚</p>
+                    <img src="placeholder-post-img.jpg" alt="Conteúdo do Post">
+                </div>
+                <div class="post-footer">
+                    <div class="post-stats">
+                        <span><i class="fas fa-thumbs-up"></i> 150</span>
+                        <span>12 Comentários</span>
+                    </div>
+                    <div class="post-actions">
+                        <button><i class="fas fa-thumbs-up"></i> Curtir</button>
+                        <button><i class="fas fa-comment"></i> Comentar</button>
+                        <button><i class="fas fa-share"></i> Compartilhar</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="right-sidebar">
+            <div class="widget">
+                <h4 class="widget-title">Contatos</h4>
+                <div class="contact-list">
+                    <div class="contact-item">
+                        <div class="profile-pic small online">
+                            <img src="placeholder-contact1.png" alt="Contato 1">
+                        </div>
+                        <span>Amigo Online 1</span>
+                    </div>
+                    <div class="contact-item">
+                        <div class="profile-pic small online">
+                            <img src="placeholder-contact2.png" alt="Contato 2">
+                        </div>
+                        <span>Amigo Online 2</span>
+                    </div>
+                    <div class="contact-item">
+                        <div class="profile-pic small">
+                            <img src="placeholder-contact3.png" alt="Contato 3">
+                        </div>
+                        <span>Amigo Offline</span>
+                    </div>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <div class="widget">
+                <h4 class="widget-title">Sua Página</h4>
+                <div class="page-item">
+                    <img src="placeholder-page.png" alt="Página">
+                    <span>Minha Página de Teste</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
