@@ -349,3 +349,106 @@ body {
   padding: 0 16px 20px;
   color: var(--color-text);
 }
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+
+  .container,
+  .feed-container {
+    flex-direction: column;
+    gap: 20px;
+    padding: 10px;
+    max-width: 100%;
+  }
+
+  .left-section,
+  .right-section,
+  .left-sidebar,
+  .right-sidebar,
+  .main-content {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .logo {
+    font-size: 40px;
+    text-align: center;
+  }
+
+  .tagline {
+    font-size: 20px;
+    line-height: 28px;
+    text-align: center;
+  }
+
+  .login-card,
+  .post-card,
+  .modal-content {
+    padding: 16px;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .form-input,
+  .btn-login,
+  .btn-create-account,
+  #storyInput {
+    font-size: 16px;
+    padding: 12px;
+    width: 100%;
+  }
+
+  .btn-create-account {
+    min-width: auto;
+  }
+
+  .story-section {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .story {
+    width: 45%;
+    text-align: center;
+  }
+
+  .composer-btn {
+    flex: 1;
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .search-box input {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  .logo-image,
+  .profile-pic img,
+  .page-item img,
+  .post-body img,
+  #videoPreview img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .modal-header h2 {
+    font-size: 24px;
+  }
+
+  .close {
+    font-size: 28px;
+  }
+
+  .modal-subtitle,
+  .create-page p,
+  .create-page a,
+  .checkbox-label,
+  .forgot-password,
+  .btn-open-signup-link {
+    font-size: 13px;
+  }
+}
