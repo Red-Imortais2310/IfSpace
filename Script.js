@@ -285,3 +285,20 @@ document.getElementById("storyInput").addEventListener("input", (e) => {
     preview.innerHTML = "";
   }
 });
+document.addEventListener("DOMContentLoaded", function () {
+  const userName = localStorage.getItem("ifspace_user_name");
+
+  const profileName = document.querySelector(".profile-link span");
+  if (userName && profileName) {
+    profileName.textContent = userName;
+  }
+
+  const composerInput = document.querySelector(".composer-top input");
+  if (userName && composerInput) {
+    composerInput.placeholder = `O que você está pensando, ${userName}?`;
+  }
+});
+if (document.body.classList.contains("feed-page")) {
+  // Executa apenas se estiver na página do feed
+}
+
