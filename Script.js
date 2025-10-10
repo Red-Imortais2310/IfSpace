@@ -133,7 +133,7 @@ if (loginForm) {
 
         setTimeout(() => {
             window.location.href = 'feed.html';
-        }, 1000);
+        });
     });
 }
 
