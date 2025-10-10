@@ -1,21 +1,22 @@
-// Elementos do DOM
+// --- Elementos do DOM ---
 const loginForm = document.getElementById('loginForm');
 const signupForm = document.getElementById('signupForm');
 const signupModal = document.getElementById('signupModal');
 const btnCreateAccount = document.getElementById('btnCreateAccount');
-
-// NOVO SELETOR: Link 'Cadastrar' com melhor espaçamento
 const btnOpenSignup = document.querySelector('.btn-open-signup-link'); 
 const closeModal = document.querySelector('.close');
 
-// Inputs do Formulário de Login (Otimização com form.elements)
-const { email: emailInput, password: passwordInput, rememberMe: rememberMeCheckbox } = loginForm.elements;
+// --- Inputs do Formulário de Login ---
+let emailInput, passwordInput, rememberMeCheckbox;
+if (loginForm) {
+    ({ email: emailInput, password: passwordInput, rememberMe: rememberMeCheckbox } = loginForm.elements);
+}
 
-// Inputs do Formulário de Cadastro (Novos inputs)
+// --- Inputs do Formulário de Cadastro ---
 const ageInput = document.getElementById('ageInput');
 const recoveryEmailInput = document.getElementById('recoveryEmail');
 
-// Constantes para localStorage
+// --- Constantes LocalStorage ---
 const STORAGE_KEYS = {
     EMAIL: 'ifspace_saved_email',
     PASSWORD: 'ifspace_saved_password',
@@ -23,84 +24,62 @@ const STORAGE_KEYS = {
 };
 
 // --- Funções Auxiliares ---
-
-// Função para fechar o modal
 function closeModalAndRestoreScroll() {
+    if (!signupModal || !signupForm) return;
     signupModal.style.display = 'none';
     document.body.style.overflow = 'auto';
-    signupForm.reset(); // Limpa o formulário ao fechar
-    
-    // Limpar erros de todos os inputs no modal
+    signupForm.reset();
     signupForm.querySelectorAll('.form-input').forEach(clearError);
 }
 
-// Função para abrir o modal
 const openModal = () => {
+    if (!signupModal) return;
     signupModal.style.display = 'block';
-    document.body.style.overflow = 'hidden'; // Prevenir scroll do body
+    document.body.style.overflow = 'hidden';
 };
 
-// Função para validar email OU telefone
 function isValidEmailOrPhone(input) {
     const value = input.trim();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    // Regex para telefone/celular brasileiro (10-11 dígitos)
     const phoneRegex = /^(\+?\d{2}?\s?)?(\(?\d{2}\)?\s?)?\d{4,5}[-.\s]?\d{4}$/;
-    
     return emailRegex.test(value) || phoneRegex.test(value.replace(/\D/g, ''));
 }
 
-// Função para mostrar mensagem de erro (usando classes CSS)
 function showError(input, message) {
-    // 1. Aplica a classe de erro para a estilização da borda (definida no CSS)
+    if (!input) return;
     input.classList.add('error');
-    
-    // 2. Remove mensagem de erro anterior se existir
     const existingError = input.parentElement.querySelector('.error-message');
-    if (existingError) {
-        existingError.remove();
-    }
-    
-    // 3. Cria e adiciona mensagem de erro
+    if (existingError) existingError.remove();
+
     const errorDiv = document.createElement('div');
     errorDiv.className = 'error-message';
     errorDiv.textContent = message;
-    errorDiv.style.color = '#f02849'; // Usando cor de erro do CSS
+    errorDiv.style.color = '#f02849';
     errorDiv.style.fontSize = '13px';
     errorDiv.style.marginTop = '4px';
     input.parentElement.appendChild(errorDiv);
 }
 
-// Função para limpar erro (usando classes CSS)
 function clearError(input) {
+    if (!input) return;
     input.classList.remove('error');
     const errorMessage = input.parentElement.querySelector('.error-message');
-    if (errorMessage) {
-        errorMessage.remove();
-    }
+    if (errorMessage) errorMessage.remove();
 }
 
-// --- Funções de Credenciais (LocalStorage) ---
-
-// Função para carregar credenciais salvas
+// --- LocalStorage ---
 function loadSavedCredentials() {
+    if (!emailInput || !passwordInput || !rememberMeCheckbox) return;
     const rememberMe = localStorage.getItem(STORAGE_KEYS.REMEMBER);
-    
     if (rememberMe === 'true') {
         const savedEmail = localStorage.getItem(STORAGE_KEYS.EMAIL);
         const savedPassword = localStorage.getItem(STORAGE_KEYS.PASSWORD);
-        
-        if (savedEmail) {
-            emailInput.value = savedEmail;
-        }
-        if (savedPassword) {
-            passwordInput.value = savedPassword;
-        }
+        if (savedEmail) emailInput.value = savedEmail;
+        if (savedPassword) passwordInput.value = savedPassword;
         rememberMeCheckbox.checked = true;
     }
 }
 
-// Função para salvar credenciais
 function saveCredentials(email, password, remember) {
     if (remember) {
         localStorage.setItem(STORAGE_KEYS.EMAIL, email);
@@ -113,192 +92,164 @@ function saveCredentials(email, password, remember) {
     }
 }
 
-// --- Event Listeners ---
-
-// 1. Inicialização
+// --- Eventos ---
 window.addEventListener('DOMContentLoaded', loadSavedCredentials);
 
-// 2. Limpar erros ao digitar
-emailInput.addEventListener('input', () => clearError(emailInput));
-passwordInput.addEventListener('input', () => clearError(passwordInput));
+if (emailInput) emailInput.addEventListener('input', () => clearError(emailInput));
+if (passwordInput) passwordInput.addEventListener('input', () => clearError(passwordInput));
 if (ageInput) ageInput.addEventListener('input', () => clearError(ageInput));
 if (recoveryEmailInput) recoveryEmailInput.addEventListener('input', () => clearError(recoveryEmailInput));
 
-// 3. Manipulador de submit do formulário de login
-loginForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
-    const rememberMe = rememberMeCheckbox.checked;
-    
-    // Validações (Retorno imediato)
-    if (!email) {
-        showError(emailInput, 'Por favor, insira seu email ou telefone.');
-        return;
-    } else if (!isValidEmailOrPhone(email)) {
-        showError(emailInput, 'Email ou telefone inválido.');
-        return;
-    }
-    
-    if (!password) {
-        showError(passwordInput, 'Por favor, insira sua senha.');
-        return;
-    } else if (password.length < 6) {
-        showError(passwordInput, 'A senha deve ter pelo menos 6 caracteres.');
-        return;
-    }
-    
-    // Salvar credenciais
-    saveCredentials(email, password, rememberMe);
-    
-    // Simular login
-    console.log('Login realizado com sucesso!');
-    
-    const submitButton = loginForm.querySelector('.btn-login');
-    const originalText = submitButton.textContent;
-    submitButton.textContent = 'Entrando...';
-    submitButton.style.background = '#03c64e'; 
-    
-    // Simular redirecionamento após 1 segundo
-    setTimeout(() => {
-        // Redireciona para o novo feed
-        window.location.href = 'feed.html'; 
-    }, 1000);
-});
+// --- Login ---
+if (loginForm) {
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+        const rememberMe = rememberMeCheckbox.checked;
 
-// 4. Manipulador de submit do formulário de cadastro
-signupForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    const age = parseInt(ageInput.value, 10);
-    const recoveryEmail = recoveryEmailInput.value.trim();
-    let hasSignupError = false;
+        if (!email) {
+            showError(emailInput, 'Por favor, insira seu email ou telefone.');
+            return;
+        } else if (!isValidEmailOrPhone(email)) {
+            showError(emailInput, 'Email ou telefone inválido.');
+            return;
+        }
 
-    // NOVO: Validação de Idade (>= 18)
-    if (isNaN(age) || age < 18) {
-        showError(ageInput, 'Você deve ter 18 anos ou mais para se cadastrar.');
-        hasSignupError = true;
-    } else {
-        clearError(ageInput);
-    }
+        if (!password) {
+            showError(passwordInput, 'Por favor, insira sua senha.');
+            return;
+        } else if (password.length < 6) {
+            showError(passwordInput, 'A senha deve ter pelo menos 6 caracteres.');
+            return;
+        }
 
-    // Validação do Email de Recuperação
-    if (!isValidEmailOrPhone(recoveryEmail)) {
-        showError(recoveryEmailInput, 'Email de recuperação inválido.');
-        hasSignupError = true;
-    } else {
-        clearError(recoveryEmailInput);
-    }
-    
-    if (hasSignupError) {
-        return;
-    }
-    
-    // Simular cadastro
-    console.log('Cadastro realizado com sucesso!');
-    
-    const submitButton = signupForm.querySelector('.btn-signup');
-    const originalText = submitButton.textContent;
-    submitButton.textContent = 'Cadastrando...';
-    
-    setTimeout(() => {
-        alert('Cadastro realizado com sucesso!\n\nEm um ambiente de produção, você seria redirecionado para completar seu perfil.');
-        closeModalAndRestoreScroll();
-        submitButton.textContent = originalText;
-    }, 1000);
-});
+        saveCredentials(email, password, rememberMe);
 
-// 5. Abrir Modal
-btnCreateAccount.addEventListener('click', openModal);
-if (btnOpenSignup) {
-    btnOpenSignup.addEventListener('click', (e) => {
-        e.preventDefault(); 
-        openModal();
+        const submitButton = loginForm.querySelector('.btn-login');
+        const originalText = submitButton.textContent;
+        submitButton.textContent = 'Entrando...';
+        submitButton.style.background = '#03c64e';
+
+        setTimeout(() => {
+            window.location.href = 'feed.html';
+        }, 1000);
     });
 }
 
-// 6. Fechar Modal (X, Clique Fora, ESC)
-closeModal.addEventListener('click', closeModalAndRestoreScroll);
+// --- Cadastro ---
+if (signupForm) {
+    signupForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const age = parseInt(ageInput?.value, 10);
+        const recoveryEmail = recoveryEmailInput?.value.trim();
+        let hasSignupError = false;
+
+        if (isNaN(age) || age < 18) {
+            showError(ageInput, 'Você deve ter 18 anos ou mais para se cadastrar.');
+            hasSignupError = true;
+        } else clearError(ageInput);
+
+        if (!isValidEmailOrPhone(recoveryEmail)) {
+            showError(recoveryEmailInput, 'Email de recuperação inválido.');
+            hasSignupError = true;
+        } else clearError(recoveryEmailInput);
+
+        if (hasSignupError) return;
+
+        const submitButton = signupForm.querySelector('.btn-signup');
+        const originalText = submitButton.textContent;
+        submitButton.textContent = 'Cadastrando...';
+
+        setTimeout(() => {
+            alert('Cadastro realizado com sucesso!');
+            closeModalAndRestoreScroll();
+            submitButton.textContent = originalText;
+        }, 1000);
+    });
+}
+
+// --- Modal ---
+if (btnCreateAccount) btnCreateAccount.addEventListener('click', openModal);
+if (btnOpenSignup) btnOpenSignup.addEventListener('click', (e) => {
+    e.preventDefault();
+    openModal();
+});
+if (closeModal) closeModal.addEventListener('click', closeModalAndRestoreScroll);
 
 window.addEventListener('click', ({ target }) => {
-    if (target === signupModal) {
-        closeModalAndRestoreScroll();
-    }
+    if (target === signupModal) closeModalAndRestoreScroll();
 });
-
 document.addEventListener('keydown', ({ key }) => {
-    if (key === 'Escape' && signupModal.style.display === 'block') {
-        closeModalAndRestoreScroll();
-    }
+    if (key === 'Escape' && signupModal?.style.display === 'block') closeModalAndRestoreScroll();
 });
 
-// Log para debug
 console.log('IfSpace - Sistema de Login e Cadastro Carregado (v1.2)');
 
-// Abrir área de criação de story
-document.getElementById("openStoryInput").addEventListener("click", () => {
-  document.getElementById("storyInputArea").classList.toggle("hidden");
-});
+// --- Feed (somente se os elementos existirem) ---
+const openStoryInput = document.getElementById("openStoryInput");
+const storyInput = document.getElementById("storyInput");
+const storyFeed = document.getElementById("storyFeed");
+const videoPreview = document.getElementById("videoPreview");
 
-// Detectar Enter e adicionar ao feed
-document.getElementById("storyInput").addEventListener("keypress", (e) => {
-  if (e.key === "Enter") {
-    const input = e.target.value.trim();
-    if (!input) return;
+if (openStoryInput && storyInput && storyFeed) {
+    openStoryInput.addEventListener("click", () => {
+        document.getElementById("storyInputArea").classList.toggle("hidden");
+    });
 
-    const feed = document.getElementById("storyFeed");
-    const storyItem = document.createElement("div");
-    storyItem.classList.add("story-item");
+    storyInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+            const input = e.target.value.trim();
+            if (!input) return;
 
-    // Verifica se é link do YouTube
-    const youtubeMatch = input.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/);
-    if (youtubeMatch) {
-      const videoId = youtubeMatch[1];
-      const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/0.jpg`;
-      storyItem.innerHTML = `
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <img src="${thumbnailUrl}" alt="Miniatura do vídeo" style="max-width: 120px; border-radius: 4px;" />
-          <a href="${input}" target="_blank">${input}</a>
-        </div>
-      `;
-    } else {
-      storyItem.textContent = input;
-    }
+            const storyItem = document.createElement("div");
+            storyItem.classList.add("story-item");
+            const youtubeMatch = input.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/);
+            if (youtubeMatch) {
+                const videoId = youtubeMatch[1];
+                const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/0.jpg`;
+                storyItem.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <img src="${thumbnailUrl}" alt="Miniatura do vídeo" style="max-width: 120px; border-radius: 4px;" />
+                        <a href="${input}" target="_blank">${input}</a>
+                    </div>
+                `;
+            } else {
+                storyItem.textContent = input;
+            }
+            storyFeed.prepend(storyItem);
+            e.target.value = "";
+            if (videoPreview) videoPreview.innerHTML = "";
+        }
+    });
 
-    feed.prepend(storyItem);
-    e.target.value = "";
-    document.getElementById("videoPreview").innerHTML = "";
-  }
-});
+    storyInput.addEventListener("input", (e) => {
+        const input = e.target.value;
+        if (!videoPreview) return;
+        const youtubeMatch = input.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/);
+        if (youtubeMatch) {
+            const videoId = youtubeMatch[1];
+            const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/0.jpg`;
+            videoPreview.innerHTML = `<img src="${thumbnailUrl}" alt="Miniatura do vídeo" style="max-width: 120px; border-radius: 4px;" />`;
+        } else {
+            videoPreview.innerHTML = "";
+        }
+    });
+}
 
-// Mostrar miniatura ao colar link
-document.getElementById("storyInput").addEventListener("input", (e) => {
-  const input = e.target.value;
-  const preview = document.getElementById("videoPreview");
-  const youtubeMatch = input.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/);
-  if (youtubeMatch) {
-    const videoId = youtubeMatch[1];
-    const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/0.jpg`;
-    preview.innerHTML = `<img src="${thumbnailUrl}" alt="Miniatura do vídeo" style="max-width: 120px; border-radius: 4px;" />`;
-  } else {
-    preview.innerHTML = "";
-  }
-});
+// --- Personalização do Feed ---
 document.addEventListener("DOMContentLoaded", function () {
-  const userName = localStorage.getItem("ifspace_user_name");
+    const userName = localStorage.getItem("ifspace_user_name");
+    const profileName = document.querySelector(".profile-link span");
+    if (userName && profileName) profileName.textContent = userName;
 
-  const profileName = document.querySelector(".profile-link span");
-  if (userName && profileName) {
-    profileName.textContent = userName;
-  }
-
-  const composerInput = document.querySelector(".composer-top input");
-  if (userName && composerInput) {
-    composerInput.placeholder = `O que você está pensando, ${userName}?`;
-  }
+    const composerInput = document.querySelector(".composer-top input");
+    if (userName && composerInput) {
+        composerInput.placeholder = `O que você está pensando, ${userName}?`;
+    }
 });
+
 if (document.body.classList.contains("feed-page")) {
-  // Executa apenas se estiver na página do feed
+    // Executa apenas se estiver na página do feed
 }
 
