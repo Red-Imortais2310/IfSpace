@@ -1,0 +1,61 @@
+/* Estilos para a página de amigos */
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+}
+
+/* Estilização do contêiner principal */
+.amigos-container {
+    max-width: 900px;
+    margin: 20px auto; /* Centraliza o conteúdo */
+    padding: 0 20px;
+}
+
+.amigos-box {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+}
+
+.amigos-box h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #1c1e21;
+}
+
+/* A grade onde os amigos vão aparecer */
+.amigos-grid {
+    display: grid;
+    /* Cria colunas flexíveis que se ajustam ao tamanho da tela */
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px; /* Espaço entre os cards de amigos */
+}
+
+/* Estilo de cada "card" de amigo */
+.amigo-card {
+    border: 1px solid #dddfe2;
+    border-radius: 8px;
+    text-align: center;
+    padding: 10px;
+    transition: box-shadow 0.2s;
+}
+
+.amigo-card:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.amigo-card img {
+    width: 100%;
+    height: 150px; /* Altura fixa para a imagem */
+    object-fit: cover; /* Garante que a imagem cubra o espaço sem distorcer */
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.amigo-card p {
+    font-weight: 600;
+    color: #1c1e21;
+    font-size: 14px;
+}

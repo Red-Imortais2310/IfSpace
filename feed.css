@@ -1,5 +1,5 @@
 /* Importação de variáveis e fontes do arquivo principal */
-@import url('style.css'); 
+@import url('feed.css'); 
 
 /* ------------------------------------- */
 /* 0. Configurações Globais do Feed */
@@ -134,11 +134,14 @@ body {
 /* ------------------------------------- */
 
 .feed-container {
-    display: flex;
-    max-width: 1300px;
-    margin: 20px auto;
-    padding: 0 16px;
-    gap: 16px;
+  display: flex;
+  justify-content: space-between; /* Distribui o espaço entre as colunas */
+  gap: 20px;
+  padding: 20px;
+  width: 100%; /* Garante que o contêiner ocupe toda a largura */
+  max-width: 1300px; /* Um limite para não ficar muito largo em telas gigantes */
+  margin: 0 auto; /* Centraliza o contêiner na tela */
+  box-sizing: border-box; /* Garante que o padding não aumente a largura total */
 }
 
 /* COLUNA ESQUERDA - Sidebar */
@@ -475,7 +478,7 @@ body {
 
 .post-body img {
     width: 100%;
-    max-height: 450px;
+    max-height: 400px;
     object-fit: contain;
     margin-top: 8px;
 }
@@ -594,4 +597,401 @@ body {
         overflow-x: scroll;
         padding-bottom: 5px; /* Evita que a barra de rolagem corte */
     }
+    /* ==========================================================================
+   NOVAS REGRAS DE LAYOUT - Adicionado para melhorar o espaçamento
+   ========================================================================== */
+
+/* Define uma cor de fundo padrão para a página */
+body {
+  background-color: #f0f2f5;
+}
+
+/* Ajusta o contêiner principal para centralizar as colunas */
+.feed-container {
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+  gap: 25px;
+  
+  /* Remove as regras antigas de largura e margem */
+  max-width: none;
+  margin: 0;
+}
+
+/* Define um tamanho fixo e comportamento "pegajoso" para as barras laterais */
+.left-sidebar,
+.right-sidebar {
+  width: 340px;
+  flex-shrink: 0;
+  flex-basis: auto; /* Reseta a regra antiga */
+  position: sticky;
+  top: 80px; 
+  align-self: flex-start;
+  height: calc(100vh - 80px);
+  overflow-y: auto;
+}
+
+/* Define que a coluna do meio cresce, mas tem um limite de largura */
+.main-content {
+  width: 100%;
+  max-width: 680px;
+  flex-basis: auto; /* Reseta a regra antiga */
+}
+
+/* Garante que o cabeçalho fique fixo no topo e acima de outros elementos */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+/* ==========================================================================
+   ESTILOS DO POPUP (MODAL) DE STORY
+   ========================================================================== */
+
+/* Camada de fundo escura que cobre a tela inteira */
+.modal-overlay {
+  position: fixed; /* Fica fixo na tela, mesmo com rolagem */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8); /* Fundo branco semitransparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Garante que fique na frente de tudo */
+  transition: opacity 0.3s ease;
+}
+
+/* Classe para esconder o modal */
+.modal-overlay.hidden {
+  display: none;
+}
+
+/* O conteúdo do popup em si */
+.modal-content {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  width: 50%; /* Ocupa 50% da tela, como você pediu */
+  max-width: 500px; /* Um limite máximo para telas muito grandes */
+  min-width: 300px; /* Um limite mínimo para telas pequenas */
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: center; /* Centraliza o título */
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #e0e0e0;
+  position: relative;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.close-button {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #f0f2f5;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 24px;
+  color: #606770;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.author-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.author-info img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.author-info span {
+  font-weight: 600;
+}
+
+/* Área de texto para digitar o story */
+#storyTextInput {
+  border: none;
+  outline: none;
+  font-size: 24px;
+  min-height: 100px;
+  resize: vertical; /* Permite que o usuário redimensione a altura */
+  font-family: inherit;
+}
+
+/* Prévia do link do vídeo */
+.link-preview {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 10px;
+  margin-top: 15px;
+}
+
+.link-preview img {
+  width: 100px;
+  height: 56px; /* Proporção 16:9 */
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.link-preview p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limita o título a 2 linhas */
+  -webkit-box-orient: vertical;
+}
+
+.modal-footer {
+  padding: 16px;
+  border-top: 1px solid #e0e0e0;
+}
+
+/* Botão de publicar */
+.post-button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--color-primary-blue); /* Usando sua variável de cor */
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.post-button:hover {
+  background-color: #166fe5;
+}
+
+.post-button:disabled {
+  background-color: #a0b9d9;
+  cursor: not-allowed;
+}
+/* ==========================================================================
+   ESTILOS DO POPUP DE STORY COM MÍDIA
+   ========================================================================== */
+
+/* Área de arrastar e soltar arquivos */
+.file-drop-zone {
+  border: 2px dashed #d0d0d0;
+  border-radius: 8px;
+  padding: 40px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+  background-color: #f9f9f9;
+}
+
+.file-drop-zone:hover, .file-drop-zone.dragover {
+  background-color: #e9ebee;
+  border-color: var(--color-primary-blue);
+}
+
+.file-drop-zone i {
+  font-size: 48px;
+  color: var(--color-primary-blue);
+  margin-bottom: 15px;
+}
+
+.file-drop-zone p {
+  margin: 0;
+  color: #606770;
+  font-weight: 500;
+}
+
+/* Área de pré-visualização da mídia */
+.media-preview {
+  margin-top: 20px;
+  width: 100%;
+  max-height: 300px; /* Limita a altura da prévia */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.media-preview img,
+.media-preview video {
+  width: auto; /* Mantém a proporção */
+  height: auto;
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 8px;
+}
+/* ==========================================================================
+   ESTILO PARA STORIES CLICÁVEIS
+   ========================================================================== */
+
+.placeholder-story {
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.placeholder-story:hover {
+  transform: scale(1.03 ); /* Efeito de zoom sutil */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+/* ==========================================================================
+   [NOVO E FUNCIONAL] ESTILOS PARA O CRIADOR DE POSTAGEM
+   ========================================================================== */
+
+/* Estilo para o novo container de postagem */
+.post-composer-novo {
+    background-color: white;
+    border-radius: 8px;
+    padding: 12px 16px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+.composer-top input {
+    cursor: pointer;
+    background-color: #f0f2f5;
+    border-radius: 20px;
+    border: none;
+    padding: 10px 15px;
+    width: 100%;
+}
+.composer-bottom {
+    display: flex;
+    justify-content: center;
+    padding-top: 10px;
+}
+/* A label que funciona como botão */
+.composer-btn-label {
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    color: #606770;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.composer-btn-label:hover {
+    background-color: #f0f2f5;
+}
+.green { color: #45bd62; }
+
+/* Estilos para o popup (modal) */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+.modal-overlay.hidden { display: none; }
+.modal-content { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); width: 500px; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 15px; }
+#postPopupText { width: 100%; min-height: 100px; border: 1px solid #ddd; border-radius: 6px; padding: 10px; font-size: 16px; }
+.media-preview-container img, .media-preview-container video { max-width: 100%; border-radius: 6px; margin-top: 10px; }
+.modal-footer { text-align: right; margin-top: 15px; }
+
+/* --- ESTILOS DE STORY APRIMORADOS --- */
+
+/* Estilização padrão para o nome do autor em todos os stories */
+.story .story-author-name {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-weight: 500;
+    font-size: 13px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+    z-index: 2;
+    text-align: center;
+    width: 90%;
+}
+
+/* Estilo para o seu próprio Story: remove elementos de "Criação" */
+.story.my-story {
+    background-color: transparent !important; /* Garante que o fundo não atrapalhe */
+    border: 2px solid var(--primary-color) !important; /* Adiciona a borda verde de ativo */
+}
+
+/* Esconde o ícone de '+' e texto "Criar Story" se ele existir */
+.story.my-story i.fa-plus,
+.story.my-story span:not(.story-author-name) {
+    display: none !important;
+}
+
+/* Garante que a imagem do story cubra o card */
+.story img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px; /* Borda do card */
+}
+
+/* Ajusta o seu story para parecer um story normal na borda */
+.story.my-story img {
+    border: none; /* Remove a borda da imagem se ela for diferente no my-story */
+}
+
+/* Estiliza o placeholder de amigos (se estiver usando a classe placeholder-story) */
+.story.placeholder-story {
+    border: 2px solid transparent; /* Borda invisível para manter o espaçamento */
+    position: relative;
+    padding: 0;
+}
+/* --- ESTILOS GERAIS PARA O CORPO DE MÍDIA DO POST --- */
+
+/* 1. Container de Mídia: Garante que o corpo do post tenha margem */
+.post-body-media {
+    margin-top: 15px; /* Adiciona espaço entre o texto e a mídia */
+    margin-bottom: 5px;
+    width: 100%; /* Ocupa a largura total do post-card */
+    overflow: hidden; /* Garante que nada saia do container */
+}
+
+/* 2. Estilo para IMAGENS e VÍDEOS dentro do post */
+.post-body-media img, 
+.post-body-media video {
+    /* Regras de Limitação e Estilo */
+    width: 100%;      /* A imagem ocupa 100% do container .post-body-media */
+    max-height: 400px; /* Limita a altura máxima da imagem (ajuste este valor para o que preferir) */
+    object-fit: cover; /* Garante que a imagem preencha a área sem distorção, cortando se necessário */
+    display: block;
+    border-radius: 8px; /* Arredonda as bordas da mídia */
+}
+
+/* 3. Ajuste específico para garantir que as thumbnails do YouTube fiquem corretas */
+.post-body-media a {
+    display: block;
+    line-height: 0;
+}
+
+
 }
