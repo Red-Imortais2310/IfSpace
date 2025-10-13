@@ -774,6 +774,7 @@ header {
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 2; /* Limita o título a 2 linhas */
+  line-clamp: 2; /* Propriedade padrão para compatibilidade */
   -webkit-box-orient: vertical;
 }
 
