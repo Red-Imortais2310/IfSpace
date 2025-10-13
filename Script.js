@@ -387,3 +387,15 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     });
+    document.getElementById("formLogin").addEventListener("submit", function(event) {
+  event.preventDefault(); // Impede que o formulário seja enviado
+
+  const usuario = document.getElementById("usuario").value;
+  const senha = document.getElementById("senha").value;
+
+  if (usuario && senha) {
+    window.location.href = "feed.html"; // Redireciona para o feed
+  } else {
+    alert("Preencha todos os campos!");
+  }
+});
