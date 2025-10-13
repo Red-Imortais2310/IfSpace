@@ -72,7 +72,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (!hasError) {
-                window.location.href = 'feed.html';
+                window.location.href = 'https://red-imortais2310.github.io/IfSpace/feed.html';
+
             }
         });
     }
