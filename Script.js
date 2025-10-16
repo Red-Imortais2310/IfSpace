@@ -50,25 +50,34 @@ document.addEventListener('DOMContentLoaded', function () {
         return emailRegex.test(value) || phoneRegex.test(value.replace(/\D/g, ''));
     }
 
-    // --- Lógica de Login ---
+// --- Lógica de Login ---
     if (loginForm) {
-        const { email: emailInput, password: passwordInput } = loginForm.elements;
+        // Acessamos os inputs diretamente pelos IDs que você definiu no HTML, 
+        // para evitar qualquer problema de compatibilidade com loginForm.elements.
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const email = emailInput.value.trim();
-            const password = passwordInput.value;
+            
+            // Assegura que os inputs existem antes de tentar pegar o valor
+            const email = emailInput ? emailInput.value.trim() : ''; 
+            const password = passwordInput ? passwordInput.value : '';
 
             let hasError = false;
+            
+            // Sua Validação de Email/Telefone
             if (!email) {
                 showError(emailInput, 'Por favor, insira seu email ou telefone.');
                 hasError = true;
-            } else if (!isValidEmailOrPhone(email)) {
+            } else if (typeof isValidEmailOrPhone !== 'undefined' && !isValidEmailOrPhone(email)) {
                 showError(emailInput, 'Email ou telefone inválido.');
                 hasError = true;
             } else {
                 clearError(emailInput);
             }
 
+            // Sua Validação de Senha
             if (!password) {
                 showError(passwordInput, 'Por favor, insira sua senha.');
                 hasError = true;
@@ -77,8 +86,9 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (!hasError) {
-                window.location.href = 'https://red-imortais2310.github.io/IfSpace/feed.html';
-
+                // 🚀 CORREÇÃO APLICADA: Redirecionamento para o NOME DE ARQUIVO CORRETO
+                // Se seu arquivo se chama feed.html, este é o caminho certo.
+                window.location.href = 'feed.html'; 
             }
         });
     }
