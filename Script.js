@@ -10,17 +10,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
     console.log('IfSpace - Sistema Carregado (v.Estável-Completa)');
 
-    // ==========================================================================
-    // PARTE 1: CÓDIGO GERAL E DAS PÁGINAS DE LOGIN/CADASTRO
-    // (Mantido como no modelo inicial)
-    // ==========================================================================
 
     const loginForm = document.getElementById('loginForm');
     const signupForm = document.getElementById('signupForm');
     const signupModal = document.getElementById('signupModal');
     const btnCreateAccount = document.getElementById('btnCreateAccount');
     const btnOpenSignup = document.querySelector('.btn-open-signup-link');
-    const closeModalBtn = document.querySelector('.modal .close');
+    const closeModalBtn = document.querySelector('#signupModal .close');
+    const forgotPasswordModal = document.getElementById('forgotPasswordModal');
+    const btnForgotPassword = document.getElementById('btnForgotPassword'); // O link "Esqueceu a senha?"
+    const closeForgotModalBtn = document.getElementById('closeForgotModal');
+    const btnCancelForgot = document.getElementById('btnCancelForgot');
+    const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+    const forgotEmailInput = document.getElementById('forgotEmailInput');
+    const forgotStatusMessage = document.getElementById('forgotStatusMessage');
+    // ----------------------------------------------------
 
     function showError(input, message) {
         if (!input) return;
@@ -49,6 +53,40 @@ document.addEventListener('DOMContentLoaded', function () {
         const phoneRegex = /^(\+?\d{2}?\s?)?(\(?\d{2}\)?\s?)?\d{4,5}[-.\s]?\d{4}$/;
         return emailRegex.test(value) || phoneRegex.test(value.replace(/\D/g, ''));
     }
+    // --- Recuperação de Senha ---
+if (btnForgotPassword) {
+    btnForgotPassword.addEventListener('click', () => {
+        if (forgotPasswordModal) forgotPasswordModal.style.display = 'block';
+    });
+}
+
+if (closeForgotModalBtn) {
+    closeForgotModalBtn.addEventListener('click', () => {
+        if (forgotPasswordModal) forgotPasswordModal.style.display = 'none';
+    });
+}
+
+if (btnCancelForgot) {
+    btnCancelForgot.addEventListener('click', () => {
+        if (forgotPasswordModal) forgotPasswordModal.style.display = 'none';
+    });
+}
+
+if (forgotPasswordForm) {
+    forgotPasswordForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const emailOrPhone = forgotEmailInput.value.trim();
+
+        if (!isValidEmailOrPhone(emailOrPhone)) {
+            showError(forgotEmailInput, 'Insira um email ou telefone válido.');
+            return;
+        }
+
+        clearError(forgotEmailInput);
+        forgotStatusMessage.textContent = 'Código de recuperação enviado! Verifique seu email ou SMS.';
+        forgotStatusMessage.style.color = 'green';
+    });
+}
 
 // --- Lógica de Login ---
     if (loginForm) {

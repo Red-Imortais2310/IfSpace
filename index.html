@@ -15,35 +15,61 @@
                 <p class="tagline">O IfSpace ajuda você a se conectar e compartilhar com as pessoas que fazem parte da sua vida.</p>
             </div>
         </div>
+        <div id="forgotPasswordModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Encontrar Sua Conta</h2>
+            <span class="close" id="closeForgotModal">&times;</span>
+        </div>
+        <div class="modal-subtitle">
+            Por favor, insira seu email ou número de telefone para procurar sua conta.
+        </div>
+        <form id="forgotPasswordForm">
+            <input 
+                type="email" 
+                id="forgotEmailInput" 
+                name="forgotEmailInput" 
+                placeholder="Email ou Telefone"
+                class="form-input"
+                required
+            >
+            
+            <div class="modal-footer" style="justify-content: flex-end;">
+                <button type="button" class="btn-cancel" id="btnCancelForgot">Cancelar</button>
+                
+                <button type="submit" class="btn-login" id="btnSearchAccount">
+                    Buscar
+                </button>
+            </div>
+            
+            <div id="forgotStatusMessage" style="margin-top: 15px; text-align: center; color: var(--color-error);"></div>
+        </form>
+    </div>
+</div>
         
         <div class="right-section">
             <div class="login-card">
                 <form id="loginForm">
-
-
-                    <div class="form-group">
+                  <div class="form-group">
                      <input 
-    type="email" 
-    id="email" 
-    name="emailInput" 
-    placeholder="Email ou telefone"
-    class="form-input"
-    autocomplete="username"
-    required
->
-
-</div>
+                       type="email" 
+                        id="email" 
+                         name="emailInput" 
+                           placeholder="Email ou telefone"
+                            class="form-input"
+                              autocomplete="username"
+                               required>
+        </div>
 
 <div class="form-group">
     <input 
-        type="password" 
-        id="password" 
-        name="passwordInput" 
-        placeholder="Senha"
-        class="form-input"
-        autocomplete="current-password"
-        required
-    >
+         type="password" 
+           id="password" 
+            name="passwordInput" 
+             placeholder="Senha"
+              class="form-input"
+               autocomplete="current-password"
+                required >
 </div>
 
                     
@@ -58,8 +84,9 @@
                     </div>
                     
                     <div class="password-links">
-                        <a href="#" class="forgot-password">Esqueceu a senha?</a>
+                      <a href="#" class="forgot-password" id="btnForgotPassword">Esqueceu a senha?</a>
                     </div>
+
                     
                     <a href="#" class="btn-open-signup-link">Cadastrar</a>
                     
@@ -133,10 +160,7 @@
                 <a href="#">Español</a>
                 <a href="#">Français (France)</a>
                 <a href="#">Italiano</a>
-                <a href="#">Deutsch</a>
-                <a href="#">العربية</a>
-                <a href="#">中文(简体)</a>
-                <a href="#">日本語</a>
+ 
             </div>
             <div class="footer-divider"></div>
             <div class="footer-links">
@@ -163,10 +187,26 @@
                 <a href="#">Ajuda</a>
             </div>
             <div class="footer-copyright">
-                <p>IfSpace © 2025</p>
+                <p>Criado por Agenor - IfSpace © 2025</p>
             </div>
         </div>
-        <!-- Atualização de teste -->
+        <!-- Botão para abrir o modal -->
+<a href="#" id="btnForgotPassword">Esqueceu a senha?</a>
+
+<!-- Modal de recuperação de senha -->
+<div id="forgotPasswordModal" class="modal hidden">
+  <div class="modal-content">
+    <span id="closeForgotModal" class="close">&times;</span>
+    <h2>Recuperar Senha</h2>
+    <form id="forgotPasswordForm">
+      <label for="forgotEmailInput">Email ou telefone:</label>
+      <input type="text" id="forgotEmailInput" placeholder="Digite seu email ou telefone" required>
+      <button type="submit">Enviar código de recuperação</button>
+      <p id="forgotStatusMessage" class="status-message"></p>
+      <button type="button" id="btnCancelForgot">Cancelar</button>
+    </form>
+  </div>
+</div>
 
     </footer>
     
