@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            window.location.href = 'feed.html';
+           window.location.href = '/IfSpace/feed.html';
         });
     } else {
         console.error('Formulário de login não encontrado no DOM.');
