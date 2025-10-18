@@ -1,14 +1,11 @@
-// ==========================================================================
-// INÍCIO DO SCRIPT GERAL DO IFSPACE (VERSÃO ESTÁVEL COMPLETA E COM POSTAGEM)
-// ==========================================================================
+
+
+
+// Script principal do IfSpace
 console.log("Script carregado!");
 
-
-
 document.addEventListener('DOMContentLoaded', function () { 
-
-    console.log('IfSpace - Sistema Carregado (v.Estável-Completa))');
-
+    console.log('IfSpace - Sistema Carregado (v.Estável-Completa)');
 
     const signupForm = document.getElementById('signupForm');
     const signupModal = document.getElementById('signupModal');
@@ -16,14 +13,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const btnOpenSignup = document.querySelector('.btn-open-signup-link');
     const closeModalBtn = document.querySelector('#signupModal .close');
     const forgotPasswordModal = document.getElementById('forgotPasswordModal');
-    const btnForgotPassword = document.getElementById('btnForgotPassword'); // O link "Esqueceu a senha?"
+    const btnForgotPassword = document.getElementById('btnForgotPassword');
     const closeForgotModalBtn = document.getElementById('closeForgotModal');
     const btnCancelForgot = document.getElementById('btnCancelForgot');
     const forgotPasswordForm = document.getElementById('forgotPasswordForm');
     const forgotEmailInput = document.getElementById('forgotEmailInput');
     const forgotStatusMessage = document.getElementById('forgotStatusMessage');
-    // ----------------------------------------------------
 
+    // Funções de validação
     function showError(input, message) {
         if (!input) return;
         input.classList.add('error');
@@ -51,44 +48,43 @@ document.addEventListener('DOMContentLoaded', function () {
         const phoneRegex = /^(\+?\d{2}?\s?)?(\(?\d{2}\)?\s?)?\d{4,5}[-.\s]?\d{4}$/;
         return emailRegex.test(value) || phoneRegex.test(value.replace(/\D/g, ''));
     }
-    // --- Recuperação de Senha ---
-if (btnForgotPassword) {
-    btnForgotPassword.addEventListener('click', () => {
-        if (forgotPasswordModal) forgotPasswordModal.style.display = 'block';
-    });
-}
 
-if (closeForgotModalBtn) {
-    closeForgotModalBtn.addEventListener('click', () => {
-        if (forgotPasswordModal) forgotPasswordModal.style.display = 'none';
-    });
-}
+    // Recuperação de senha
+    if (btnForgotPassword) {
+        btnForgotPassword.addEventListener('click', () => {
+            if (forgotPasswordModal) forgotPasswordModal.style.display = 'block';
+        });
+    }
 
-if (btnCancelForgot) {
-    btnCancelForgot.addEventListener('click', () => {
-        if (forgotPasswordModal) forgotPasswordModal.style.display = 'none';
-    });
-}
+    if (closeForgotModalBtn) {
+        closeForgotModalBtn.addEventListener('click', () => {
+            if (forgotPasswordModal) forgotPasswordModal.style.display = 'none';
+        });
+    }
 
-if (forgotPasswordForm) {
-    forgotPasswordForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const emailOrPhone = forgotEmailInput.value.trim();
+    if (btnCancelForgot) {
+        btnCancelForgot.addEventListener('click', () => {
+            if (forgotPasswordModal) forgotPasswordModal.style.display = 'none';
+        });
+    }
 
-        if (!isValidEmailOrPhone(emailOrPhone)) {
-            showError(forgotEmailInput, 'Insira um email ou telefone válido.');
-            return;
-        }
+    if (forgotPasswordForm) {
+        forgotPasswordForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const emailOrPhone = forgotEmailInput.value.trim();
 
-        clearError(forgotEmailInput);
-        forgotStatusMessage.textContent = 'Código de recuperação enviado! Verifique seu email ou SMS.';
-        forgotStatusMessage.style.color = 'green';
-    });
-}
+            if (!isValidEmailOrPhone(emailOrPhone)) {
+                showError(forgotEmailInput, 'Insira um email ou telefone válido.');
+                return;
+            }
 
-// --- Lógica de Login --- (moved to the bottom to avoid duplication)
+            clearError(forgotEmailInput);
+            forgotStatusMessage.textContent = 'Código de recuperação enviado! Verifique seu email ou SMS.';
+            forgotStatusMessage.style.color = 'green';
+        });
+    }
 
-    // --- Lógica de Cadastro e Modal ---
+    // Lógica de Cadastro
     if (signupForm) {
         signupForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -111,13 +107,30 @@ if (forgotPasswordForm) {
     window.addEventListener('click', ({ target }) => { if (target === signupModal) closeSignupModal(); });
     document.addEventListener('keydown', ({ key }) => { if (key === 'Escape' && signupModal?.style.display === 'block') closeSignupModal(); });
 
-      // ==========================================================================
-    // PARTE 2: CÓDIGO ESPECÍFICO DA PÁGINA DE FEED (CORRIGIDO E COMPLETO)
-    // ==========================================================================
+    // Lógica de Login
+    const loginForm = document.getElementById('loginForm');
 
+    if (loginForm) {
+        loginForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const usernameElem = document.getElementById('username') || document.getElementById('email');
+            const username = usernameElem ? usernameElem.value.trim() : '';
+            const passwordElem = document.getElementById('password');
+            const password = passwordElem ? passwordElem.value.trim() : '';
+
+            if (username === '' || password === '') {
+                alert('Preencha todos os campos!');
+                return;
+            }
+
+            window.location.href = 'feed.html';
+        });
+    } else {
+        console.error('Formulário de login não encontrado no DOM.');
+    }
+
+    // Lógica específica da página de feed
     if (document.querySelector('.feed-container')) {
-
-        // --- LÓGICA SIMPLES E FUNCIONAL PARA TROCAR A FOTO DO STORY (Modelo Inicial) ---
         const meuStoryCard = document.getElementById('meu-story');
         const meuStoryImage = document.getElementById('meu-story-img');
         const trocarStoryInput = document.getElementById('trocarStoryInput');
@@ -137,12 +150,9 @@ if (forgotPasswordForm) {
                     reader.readAsDataURL(file);
                 }
             });
+        }
 
-
-        // ==========================================================================
-        // LÓGICA DO MODAL DE POSTAGEM E CRIAÇÃO DE POSTS (FUNCIONAL)
-        // ==========================================================================
-
+        // Lógica do modal de postagem
         const openPostPopup = document.getElementById('openPostPopup');
         const addPhotoVideoComposer = document.getElementById('addPhotoVideoComposer');
         const postModal = document.getElementById('postModal');
@@ -150,56 +160,46 @@ if (forgotPasswordForm) {
         const postTextInput = document.getElementById('postTextInput');
         const postFileInput = document.getElementById('postFileInput');
         const publishPostButton = document.getElementById('publishPostButton');
-        const addPhotoButton = document.getElementById('addPhotoButton'); 
-        const postMediaPreview = document.getElementById('postMediaPreview'); 
+        const addPhotoButton = document.getElementById('addPhotoButton');
+        const postMediaPreview = document.getElementById('postMediaPreview');
         const postComposer = document.querySelector('.post-composer');
-        const liveVideoButton = document.querySelector('.composer-btn .fa-video').closest('button'); // Botão Live/Vídeo ao Vivo
+        const liveVideoButton = document.querySelector('.composer-btn .fa-video')?.closest('button');
 
-        // --- Funções Auxiliares de Link/YouTube ---
         function getYoutubeId(url) {
             const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/i;
-            const match = url.match(regex);
-            return match ? match[1] : null;
+            return url.match(regex) ? url.match(regex)[1] : null;
         }
 
         function previewLink(url) {
             if (!postMediaPreview) return;
             postMediaPreview.innerHTML = '';
             postMediaPreview.classList.remove('hidden');
-
             const youtubeId = getYoutubeId(url);
-
             if (youtubeId) {
-                const thumbnailUrl = `https://img.youtube.com/vi/${youtubeId}/mqdefault.jpg`;
                 postMediaPreview.innerHTML = `
                     <div class="youtube-preview" style="position: relative; cursor: pointer; border-radius: 8px; overflow: hidden;">
-                        <img src="${thumbnailUrl}" alt="Thumbnail do YouTube" style="width: 100%; height: auto; display: block;">
+                        <img src="https://img.youtube.com/vi/${youtubeId}/mqdefault.jpg" alt="Thumbnail do YouTube" style="width: 100%; height: auto; display: block;">
                         <i class="fab fa-youtube" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 60px; color: red;"></i>
                     </div>
                 `;
             } else {
-                // Simulação para outros links
                 postMediaPreview.innerHTML = `<a href="${url}" target="_blank" style="color: var(--primary-color); font-weight: 600;">Link anexado: ${url.substring(0, 50)}...</a>`;
             }
         }
 
-
-        // --- Funções do Modal de Postagem (Corrigidas para Foco) ---
-        function openPostModal() { // SEM FOCO
+        function openPostModal() {
             if (postModal) postModal.classList.remove('hidden');
         }
 
-        function openPostModalAndFocus() { // COM FOCO
+        function openPostModalAndFocus() {
             if (postModal) postModal.classList.remove('hidden');
-            setTimeout(() => {
-                if (postTextInput) postTextInput.focus();
-            }, 50);
+            setTimeout(() => { if (postTextInput) postTextInput.focus(); }, 50);
         }
 
         function closeAndResetPostModal() {
             if (postModal) postModal.classList.add('hidden');
-            if (postTextInput) postTextInput.value = ''; 
-            if (postFileInput) postFileInput.value = ''; 
+            if (postTextInput) postTextInput.value = '';
+            if (postFileInput) postFileInput.value = '';
             if (postMediaPreview) {
                 postMediaPreview.innerHTML = '';
                 postMediaPreview.classList.add('hidden');
@@ -207,81 +207,44 @@ if (forgotPasswordForm) {
             if (publishPostButton) publishPostButton.disabled = true;
         }
 
-               // 1. Abrir Modal pelos botões do Composer (Lógica de Associação)
-        
-        // Input Principal (com Foco) - Se clicar na caixa de texto, foca.
-        if (openPostPopup) {
-            openPostPopup.addEventListener('click', openPostModalAndFocus);
-        }
-        
-        // Botão Foto/Vídeo (CORRIGIDO) - Abre o modal e clica no input de arquivo
+        if (openPostPopup) openPostPopup.addEventListener('click', openPostModalAndFocus);
         if (addPhotoVideoComposer) {
             addPhotoVideoComposer.addEventListener('click', () => {
-                openPostModal(); // Abre o modal primeiro
-                // Pequeno atraso para garantir que o modal esteja visível antes de clicar no input
-                setTimeout(() => { 
-                    if (postFileInput) {
-                        postFileInput.click(); // Abre a janela de seleção de arquivo
-                    }
-                }, 100); 
+                openPostModal();
+                setTimeout(() => { if (postFileInput) postFileInput.click(); }, 100);
             });
         }
-        
-        // Botão Vídeo ao Vivo (SEM Foco) - Apenas abre o modal.
-        if (liveVideoButton) {
-            liveVideoButton.addEventListener('click', openPostModal);
-        }
+        if (liveVideoButton) liveVideoButton.addEventListener('click', openPostModal);
+        if (closePostModal) closePostModal.addEventListener('click', closeAndResetPostModal);
 
-        // 2. Fechar Modal
-        if (closePostModal) {
-            closePostModal.addEventListener('click', closeAndResetPostModal);
-        }
-
-        // 3. Ativar/Desativar botão Publicar E processar Link (CORRIGIDO)
         function updatePublishButton() {
             if (!publishPostButton || !postTextInput || !postFileInput) return;
             const textContent = postTextInput.value.trim();
             const hasText = textContent.length > 0;
             const hasFile = postFileInput.files.length > 0;
-            
-            // Regex simples para detectar qualquer URL
             const urlRegex = /(https?:\/\/[^\s]+)/g;
             const match = textContent.match(urlRegex);
             const hasLink = match && match.length > 0;
 
-            // Lógica de Pré-visualização de Link
-            if (hasLink && !hasFile) {
-                previewLink(match[0]);
-            } else if (!hasFile) {
-                // Se não houver link nem arquivo, limpa a prévia
+            if (hasLink && !hasFile) previewLink(match[0]);
+            else if (!hasFile) {
                 postMediaPreview.innerHTML = '';
                 postMediaPreview.classList.add('hidden');
-            } else if (hasFile && postMediaPreview) {
-                // Se o usuário selecionou um arquivo, esconde a prévia de link/texto
-                // (a prévia de arquivo é injetada no evento 'change' do postFileInput)
             }
-            
-            // Habilita se houver texto, arquivo ou link
             publishPostButton.disabled = !(hasText || hasFile || hasLink);
         }
 
-        if (postTextInput) {
-            postTextInput.addEventListener('input', updatePublishButton);
-        }
-        
-        // 4. Pré-visualização de Mídia (Upload Local)
+        if (postTextInput) postTextInput.addEventListener('input', updatePublishButton);
         if (postFileInput) {
             postFileInput.addEventListener('change', (e) => {
                 if (!postMediaPreview) return;
                 postMediaPreview.innerHTML = '';
                 const file = e.target.files[0];
-
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = (e) => {
                         postMediaPreview.classList.remove('hidden');
                         let mediaElement;
-                        
                         if (file.type.startsWith('image/')) {
                             mediaElement = document.createElement('img');
                             mediaElement.src = e.target.result;
@@ -294,9 +257,7 @@ if (forgotPasswordForm) {
                             mediaElement.style.maxHeight = '300px';
                             mediaElement.style.borderRadius = '8px';
                         }
-                        if (mediaElement) {
-                            postMediaPreview.appendChild(mediaElement);
-                        }
+                        if (mediaElement) postMediaPreview.appendChild(mediaElement);
                     };
                     reader.readAsDataURL(file);
                 } else {
@@ -306,40 +267,24 @@ if (forgotPasswordForm) {
             });
         }
 
-        // 5. Acionar input de arquivo pelo ícone no modal
-        if (addPhotoButton) {
-            addPhotoButton.addEventListener('click', () => {
-                if (postFileInput) postFileInput.click();
-            });
-        }
+        if (addPhotoButton) addPhotoButton.addEventListener('click', () => { if (postFileInput) postFileInput.click(); });
+        if (publishPostButton) publishPostButton.addEventListener('click', () => { createPost(); closeAndResetPostModal(); });
 
-        // 6. Criar e Publicar Post
-        if (publishPostButton) {
-            publishPostButton.addEventListener('click', () => {
-                createPost();
-                closeAndResetPostModal();
-            });
-        }
-
-        // Função para criar o HTML de um novo post (CORRIGIDO PARA LINKS DO YOUTUBE)
         function createPost() {
             const textContent = postTextInput.value.trim();
             const file = postFileInput.files[0];
-            
-            if (!textContent && !file) return; 
+            if (!textContent && !file) return;
 
             const newPost = document.createElement('div');
             newPost.className = 'post-card';
-            newPost.style.order = -1; // Garante que o novo post apareça no topo
+            newPost.style.order = -1;
 
             let mediaHtml = '';
-            
             const urlRegex = /(https?:\/\/[^\s]+)/g;
             const linkMatch = textContent.match(urlRegex);
             const isYoutubePost = linkMatch && getYoutubeId(linkMatch[0]);
 
             if (file) {
-                // Lógica de Postagem de Arquivo (imagem/vídeo local)
                 const mediaUrl = URL.createObjectURL(file);
                 if (file.type.startsWith('image/')) {
                     mediaHtml = `<div class="post-body-media" style="margin-top: 10px;"><img src="${mediaUrl}" alt="Mídia do Post" style="width: 100%; height: auto;"></div>`;
@@ -347,23 +292,18 @@ if (forgotPasswordForm) {
                     mediaHtml = `<div class="post-body-media" style="margin-top: 10px;"><video controls src="${mediaUrl}" style="width: 100%; height: auto;"></video></div>`;
                 }
             } else if (isYoutubePost) {
-                // LÓGICA DE POSTAGEM DE LINK DO YOUTUBE
                 const youtubeId = getYoutubeId(linkMatch[0]);
-                const thumbnailUrl = `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`; 
-                
-                // Cria um link que, ao ser clicado, abre o vídeo
                 mediaHtml = `
                     <div class="post-body-media" style="position: relative; cursor: pointer; margin-top: 10px; border-radius: 8px; overflow: hidden;">
                         <a href="https://www.youtube.com/watch?v=${youtubeId}" target="_blank">
-                            <img src="${thumbnailUrl}" alt="Vídeo do YouTube" style="width: 100%; height: auto; display: block;">
+                            <img src="https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg" alt="Vídeo do YouTube" style="width: 100%; height: auto; display: block;">
                             <i class="fab fa-youtube" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 80px; color: rgba(255, 0, 0, 0.8);"></i>
                         </a>
                     </div>
                 `;
             }
-            
-            const formattedText = textContent.replace(/\n/g, '<br>');
 
+            const formattedText = textContent.replace(/\n/g, '<br>');
             newPost.innerHTML = `
                 <div class="post-header">
                     <img src="imagens/euPerfil.jpeg" alt="Autor">
@@ -389,38 +329,7 @@ if (forgotPasswordForm) {
                     </div>
                 </div>
             `;
-            
-            if (postComposer) {
-                postComposer.after(newPost);
-            }
+            if (postComposer) postComposer.after(newPost);
         }
     }
-    
-    // --- Login handling moved into the same DOMContentLoaded to avoid duplicate listeners ---
-    const loginForm = document.getElementById('loginForm');
-
-    if (loginForm) {
-        loginForm.addEventListener('submit', function (event) {
-            event.preventDefault();
-
-            // Try to read a username field or fallback to email
-            const usernameElem = document.getElementById('username') || document.getElementById('email');
-            const username = usernameElem ? usernameElem.value.trim() : '';
-            const passwordElem = document.getElementById('password');
-            const password = passwordElem ? passwordElem.value.trim() : '';
-
-            // Validação básica
-            if (username === '' || password === '') {
-                alert('Preencha todos os campos!');
-                return;
-            }
-
-            // Redireciona corretamente para o feed.html
-            window.location.href = 'feed.html';
-        });
-    } else {
-        console.error('Formulário de login não encontrado no DOM.');
-    }
 });
-
-
