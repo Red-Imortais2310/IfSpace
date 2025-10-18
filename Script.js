@@ -86,48 +86,7 @@ if (forgotPasswordForm) {
     });
 }
 
-// --- Lógica de Login ---
-    if (loginForm) {
-        // Acessamos os inputs diretamente pelos IDs que você definiu no HTML, 
-        // para evitar qualquer problema de compatibilidade com loginForm.elements.
-        const emailInput = document.getElementById('email');
-        const passwordInput = document.getElementById('password');
-
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            // Assegura que os inputs existem antes de tentar pegar o valor
-            const email = emailInput ? emailInput.value.trim() : ''; 
-            const password = passwordInput ? passwordInput.value : '';
-
-            let hasError = false;
-            
-            // Sua Validação de Email/Telefone
-            if (!email) {
-                showError(emailInput, 'Por favor, insira seu email ou telefone.');
-                hasError = true;
-            } else if (typeof isValidEmailOrPhone !== 'undefined' && !isValidEmailOrPhone(email)) {
-                showError(emailInput, 'Email ou telefone inválido.');
-                hasError = true;
-            } else {
-                clearError(emailInput);
-            }
-
-            // Sua Validação de Senha
-            if (!password) {
-                showError(passwordInput, 'Por favor, insira sua senha.');
-                hasError = true;
-            } else {
-                clearError(passwordInput);
-            }
-
-            if (!hasError) {
-                // 🚀 CORREÇÃO APLICADA: Redirecionamento para o NOME DE ARQUIVO CORRETO
-                // Se seu arquivo se chama feed.html, este é o caminho certo.
-                window.location.href = 'feed.html'; 
-            }
-        });
-    }
+// --- Lógica de Login --- (moved to the bottom to avoid duplication)
 
     // --- Lógica de Cadastro e Modal ---
     if (signupForm) {
@@ -178,10 +137,6 @@ if (forgotPasswordForm) {
                     reader.readAsDataURL(file);
                 }
             });
-        } else {
-            console.error("AVISO: Não foi possível iniciar a função de trocar story. Verifique se os IDs 'meu-story', 'meu-story-img' e 'trocarStoryInput' existem no seu feed.html.");
-        }
-        window.location.href = 'https://red-imortais2310.github.io/IfSpace/feed.html';
 
 
         // ==========================================================================
@@ -437,32 +392,35 @@ if (forgotPasswordForm) {
             
             if (postComposer) {
                 postComposer.after(newPost);
-                }
             }
         }
-    });
-    document.addEventListener('DOMContentLoaded', () => {
-  const loginForm = document.getElementById('loginForm');
+    }
+    
+    // --- Login handling moved into the same DOMContentLoaded to avoid duplicate listeners ---
+    const loginForm = document.getElementById('loginForm');
 
-  if (loginForm) {
-    loginForm.addEventListener('submit', function (event) {
-      event.preventDefault();
+    if (loginForm) {
+        loginForm.addEventListener('submit', function (event) {
+            event.preventDefault();
 
-     
-      const password = document.getElementById('password').value.trim();
+            // Try to read a username field or fallback to email
+            const usernameElem = document.getElementById('username') || document.getElementById('email');
+            const username = usernameElem ? usernameElem.value.trim() : '';
+            const passwordElem = document.getElementById('password');
+            const password = passwordElem ? passwordElem.value.trim() : '';
 
-      // Aqui você pode colocar uma validação básica
-      if (username === '' || password === '') {
-        alert('Preencha todos os campos!');
-        return;
-      }
+            // Validação básica
+            if (username === '' || password === '') {
+                alert('Preencha todos os campos!');
+                return;
+            }
 
-      // Redireciona corretamente para o feed.html
-      window.location.href = './feed.html';
-    });
-  } else {
-    console.error('Formulário de login não encontrado no DOM.');
-  }
+            // Redireciona corretamente para o feed.html
+            window.location.href = './feed.html';
+        });
+    } else {
+        console.error('Formulário de login não encontrado no DOM.');
+    }
 });
 
 
