@@ -5,9 +5,9 @@ console.log("Script carregado!");
 
 
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () { 
 
-    console.log('IfSpace - Sistema Carregado (v.Estável-Completa)');
+    console.log('IfSpace - Sistema Carregado (v.Estável-Completa))');
 
 
     const signupForm = document.getElementById('signupForm');
@@ -416,7 +416,7 @@ if (forgotPasswordForm) {
             }
 
             // Redireciona corretamente para o feed.html
-            window.location.href = './feed.html';
+            window.location.href = 'feed.html';
         });
     } else {
         console.error('Formulário de login não encontrado no DOM.');
