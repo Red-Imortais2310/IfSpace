@@ -1,6 +1,3 @@
-
-
-
 // Script principal do IfSpace
 console.log("Script carregado!");
 
@@ -163,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
-        // Lógica do modal de postagem
+        // Lógica do modal de postagem (mantida como no original)
         const openPostPopup = document.getElementById('openPostPopup');
         const addPhotoVideoComposer = document.getElementById('addPhotoVideoComposer');
         const postModal = document.getElementById('postModal');
