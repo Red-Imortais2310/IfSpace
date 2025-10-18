@@ -2,7 +2,6 @@
 // INÍCIO DO SCRIPT GERAL DO IFSPACE (VERSÃO ESTÁVEL COMPLETA E COM POSTAGEM)
 // ==========================================================================
 console.log("Script carregado!");
-const loginForm = document.getElementById('loginForm');
 
 
 
