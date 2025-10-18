@@ -182,6 +182,8 @@ if (forgotPasswordForm) {
         } else {
             console.error("AVISO: Não foi possível iniciar a função de trocar story. Verifique se os IDs 'meu-story', 'meu-story-img' e 'trocarStoryInput' existem no seu feed.html.");
         }
+        window.location.href = 'https://red-imortais2310.github.io/IfSpace/feed.html';
+
 
         // ==========================================================================
         // LÓGICA DO MODAL DE POSTAGEM E CRIAÇÃO DE POSTS (FUNCIONAL)
@@ -447,8 +449,7 @@ if (forgotPasswordForm) {
     loginForm.addEventListener('submit', function (event) {
       event.preventDefault();
 
-     const username = document.getElementById('email').value.trim();
-
+     
       const password = document.getElementById('password').value.trim();
 
       // Aqui você pode colocar uma validação básica
