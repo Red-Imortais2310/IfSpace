@@ -109,21 +109,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Lógica de Login
     const loginForm = document.getElementById('loginForm');
+    console.log('Procurando loginForm:', loginForm);
 
     if (loginForm) {
         loginForm.addEventListener('submit', function (event) {
             event.preventDefault();
-            const usernameElem = document.getElementById('username') || document.getElementById('email');
-            const username = usernameElem ? usernameElem.value.trim() : '';
+            console.log('Login submit disparado');
+
+            const emailElem = document.getElementById('email'); // Captura apenas o id="email"
+            const username = emailElem ? emailElem.value.trim() : '';
             const passwordElem = document.getElementById('password');
             const password = passwordElem ? passwordElem.value.trim() : '';
 
+            console.log('username/email:', username);
+            console.log('password:', password);
+
             if (username === '' || password === '') {
                 alert('Preencha todos os campos!');
+                console.log('Campos vazios detectados');
                 return;
             }
 
-           window.location.href = '/IfSpace/feed.html';
+            // Detecta se é ambiente local ou GitHub Pages
+            const isLocal = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
+            const redirectPath = isLocal ? 'feed.html' : '/IfSpace/feed.html';
+            console.log('Redirecionando para:', redirectPath);
+            window.location.href = redirectPath;
         });
     } else {
         console.error('Formulário de login não encontrado no DOM.');
