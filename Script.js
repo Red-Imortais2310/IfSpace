@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log('IfSpace - Sistema Carregado (v.Estável-Completa)');
 
 
-    const loginForm = document.getElementById('loginForm');
     const signupForm = document.getElementById('signupForm');
     const signupModal = document.getElementById('signupModal');
     const btnCreateAccount = document.getElementById('btnCreateAccount');
@@ -183,8 +182,6 @@ if (forgotPasswordForm) {
         } else {
             console.error("AVISO: Não foi possível iniciar a função de trocar story. Verifique se os IDs 'meu-story', 'meu-story-img' e 'trocarStoryInput' existem no seu feed.html.");
         }
-        window.location.href = 'https://red-imortais2310.github.io/IfSpace/feed.html';
-
 
         // ==========================================================================
         // LÓGICA DO MODAL DE POSTAGEM E CRIAÇÃO DE POSTS (FUNCIONAL)
