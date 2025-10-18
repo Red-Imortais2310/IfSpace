@@ -443,4 +443,28 @@ if (forgotPasswordForm) {
             }
         }
     });
+    document.addEventListener('DOMContentLoaded', () => {
+  const loginForm = document.getElementById('loginForm');
+
+  if (loginForm) {
+    loginForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      // Aqui você pode colocar uma validação básica
+      if (username === '' || password === '') {
+        alert('Preencha todos os campos!');
+        return;
+      }
+
+      // Redireciona corretamente para o feed.html
+      window.location.href = './feed.html';
+    });
+  } else {
+    console.error('Formulário de login não encontrado no DOM.');
+  }
+});
+
 
