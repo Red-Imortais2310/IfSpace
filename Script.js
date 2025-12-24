@@ -1,255 +1,343 @@
-// --- Elementos do DOM ---
-const loginForm = document.getElementById('loginForm');
-const signupForm = document.getElementById('signupForm');
-const signupModal = document.getElementById('signupModal');
-const btnCreateAccount = document.getElementById('btnCreateAccount');
-const btnOpenSignup = document.querySelector('.btn-open-signup-link'); 
-const closeModal = document.querySelector('.close');
+// Script principal do IfSpace
+console.log("Script carregado!");
 
-// --- Inputs do Formulário de Login ---
-let emailInput, passwordInput, rememberMeCheckbox;
-if (loginForm) {
-    ({ email: emailInput, password: passwordInput, rememberMe: rememberMeCheckbox } = loginForm.elements);
-}
+document.addEventListener('DOMContentLoaded', function () { 
+    console.log('IfSpace - Sistema Carregado (v.Estável-Completa)');
 
-// --- Inputs do Formulário de Cadastro ---
-const ageInput = document.getElementById('ageInput');
-const recoveryEmailInput = document.getElementById('recoveryEmail');
+    const signupForm = document.getElementById('signupForm');
+    const signupModal = document.getElementById('signupModal');
+    const btnCreateAccount = document.getElementById('btnCreateAccount');
+    const btnOpenSignup = document.querySelector('.btn-open-signup-link');
+    const closeModalBtn = document.querySelector('#signupModal .close');
+    const forgotPasswordModal = document.getElementById('forgotPasswordModal');
+    const btnForgotPassword = document.getElementById('btnForgotPassword');
+    const closeForgotModalBtn = document.getElementById('closeForgotModal');
+    const btnCancelForgot = document.getElementById('btnCancelForgot');
+    const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+    const forgotEmailInput = document.getElementById('forgotEmailInput');
+    const forgotStatusMessage = document.getElementById('forgotStatusMessage');
 
-// --- Constantes LocalStorage ---
-const STORAGE_KEYS = {
-    EMAIL: 'ifspace_saved_email',
-    PASSWORD: 'ifspace_saved_password',
-    REMEMBER: 'ifspace_remember_me'
-};
-
-// --- Funções Auxiliares ---
-function closeModalAndRestoreScroll() {
-    if (!signupModal || !signupForm) return;
-    signupModal.style.display = 'none';
-    document.body.style.overflow = 'auto';
-    signupForm.reset();
-    signupForm.querySelectorAll('.form-input').forEach(clearError);
-}
-
-const openModal = () => {
-    if (!signupModal) return;
-    signupModal.style.display = 'block';
-    document.body.style.overflow = 'hidden';
-};
-
-function isValidEmailOrPhone(input) {
-    const value = input.trim();
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const phoneRegex = /^(\+?\d{2}?\s?)?(\(?\d{2}\)?\s?)?\d{4,5}[-.\s]?\d{4}$/;
-    return emailRegex.test(value) || phoneRegex.test(value.replace(/\D/g, ''));
-}
-
-function showError(input, message) {
-    if (!input) return;
-    input.classList.add('error');
-    const existingError = input.parentElement.querySelector('.error-message');
-    if (existingError) existingError.remove();
-
-    const errorDiv = document.createElement('div');
-    errorDiv.className = 'error-message';
-    errorDiv.textContent = message;
-    errorDiv.style.color = '#f02849';
-    errorDiv.style.fontSize = '13px';
-    errorDiv.style.marginTop = '4px';
-    input.parentElement.appendChild(errorDiv);
-}
-
-function clearError(input) {
-    if (!input) return;
-    input.classList.remove('error');
-    const errorMessage = input.parentElement.querySelector('.error-message');
-    if (errorMessage) errorMessage.remove();
-}
-
-// --- LocalStorage ---
-function loadSavedCredentials() {
-    if (!emailInput || !passwordInput || !rememberMeCheckbox) return;
-    const rememberMe = localStorage.getItem(STORAGE_KEYS.REMEMBER);
-    if (rememberMe === 'true') {
-        const savedEmail = localStorage.getItem(STORAGE_KEYS.EMAIL);
-        const savedPassword = localStorage.getItem(STORAGE_KEYS.PASSWORD);
-        if (savedEmail) emailInput.value = savedEmail;
-        if (savedPassword) passwordInput.value = savedPassword;
-        rememberMeCheckbox.checked = true;
+    // Funções de validação
+    function showError(input, message) {
+        if (!input) return;
+        input.classList.add('error');
+        const existingError = input.parentElement.querySelector('.error-message');
+        if (existingError) existingError.remove();
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message';
+        errorDiv.textContent = message;
+        errorDiv.style.color = '#f02849';
+        errorDiv.style.fontSize = '13px';
+        errorDiv.style.marginTop = '4px';
+        input.parentElement.appendChild(errorDiv);
     }
-}
 
-function saveCredentials(email, password, remember) {
-    if (remember) {
-        localStorage.setItem(STORAGE_KEYS.EMAIL, email);
-        localStorage.setItem(STORAGE_KEYS.PASSWORD, password);
-        localStorage.setItem(STORAGE_KEYS.REMEMBER, 'true');
-    } else {
-        localStorage.removeItem(STORAGE_KEYS.EMAIL);
-        localStorage.removeItem(STORAGE_KEYS.PASSWORD);
-        localStorage.removeItem(STORAGE_KEYS.REMEMBER);
+    function clearError(input) {
+        if (!input) return;
+        input.classList.remove('error');
+        const errorMessage = input.parentElement.querySelector('.error-message');
+        if (errorMessage) errorMessage.remove();
     }
-}
 
-// --- Eventos ---
-window.addEventListener('DOMContentLoaded', loadSavedCredentials);
+    function isValidEmailOrPhone(input) {
+        const value = input.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phoneRegex = /^(\+?\d{2}?\s?)?(\(?\d{2}\)?\s?)?\d{4,5}[-.\s]?\d{4}$/;
+        return emailRegex.test(value) || phoneRegex.test(value.replace(/\D/g, ''));
+    }
 
-if (emailInput) emailInput.addEventListener('input', () => clearError(emailInput));
-if (passwordInput) passwordInput.addEventListener('input', () => clearError(passwordInput));
-if (ageInput) ageInput.addEventListener('input', () => clearError(ageInput));
-if (recoveryEmailInput) recoveryEmailInput.addEventListener('input', () => clearError(recoveryEmailInput));
-
-// --- Login ---
-if (loginForm) {
-    loginForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const email = emailInput.value.trim();
-        const password = passwordInput.value;
-        const rememberMe = rememberMeCheckbox.checked;
-
-        if (!email) {
-            showError(emailInput, 'Por favor, insira seu email ou telefone.');
-            return;
-        } else if (!isValidEmailOrPhone(email)) {
-            showError(emailInput, 'Email ou telefone inválido.');
-            return;
-        }
-
-        if (!password) {
-            showError(passwordInput, 'Por favor, insira sua senha.');
-            return;
-        } else if (password.length < 6) {
-            showError(passwordInput, 'A senha deve ter pelo menos 6 caracteres.');
-            return;
-        }
-
-        saveCredentials(email, password, rememberMe);
-
-        const submitButton = loginForm.querySelector('.btn-login');
-        const originalText = submitButton.textContent;
-        submitButton.textContent = 'Entrando...';
-        submitButton.style.background = '#03c64e';
-
-        setTimeout(() => {
-            window.location.href = 'feed.html';
+    // Recuperação de senha
+    if (btnForgotPassword) {
+        btnForgotPassword.addEventListener('click', () => {
+            if (forgotPasswordModal) forgotPasswordModal.style.display = 'block';
         });
-    });
-}
+    }
 
-// --- Cadastro ---
-if (signupForm) {
-    signupForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const age = parseInt(ageInput?.value, 10);
-        const recoveryEmail = recoveryEmailInput?.value.trim();
-        let hasSignupError = false;
+    if (closeForgotModalBtn) {
+        closeForgotModalBtn.addEventListener('click', () => {
+            if (forgotPasswordModal) forgotPasswordModal.style.display = 'none';
+        });
+    }
 
-        if (isNaN(age) || age < 18) {
-            showError(ageInput, 'Você deve ter 18 anos ou mais para se cadastrar.');
-            hasSignupError = true;
-        } else clearError(ageInput);
+    if (btnCancelForgot) {
+        btnCancelForgot.addEventListener('click', () => {
+            if (forgotPasswordModal) forgotPasswordModal.style.display = 'none';
+        });
+    }
 
-        if (!isValidEmailOrPhone(recoveryEmail)) {
-            showError(recoveryEmailInput, 'Email de recuperação inválido.');
-            hasSignupError = true;
-        } else clearError(recoveryEmailInput);
+    if (forgotPasswordForm) {
+        forgotPasswordForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const emailOrPhone = forgotEmailInput.value.trim();
 
-        if (hasSignupError) return;
+            if (!isValidEmailOrPhone(emailOrPhone)) {
+                showError(forgotEmailInput, 'Insira um email ou telefone válido.');
+                return;
+            }
 
-        const submitButton = signupForm.querySelector('.btn-signup');
-        const originalText = submitButton.textContent;
-        submitButton.textContent = 'Cadastrando...';
+            clearError(forgotEmailInput);
+            forgotStatusMessage.textContent = 'Código de recuperação enviado! Verifique seu email ou SMS.';
+            forgotStatusMessage.style.color = 'green';
+        });
+    }
 
-        setTimeout(() => {
+    // Lógica de Cadastro
+    if (signupForm) {
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
             alert('Cadastro realizado com sucesso!');
-            closeModalAndRestoreScroll();
-            submitButton.textContent = originalText;
-        }, 1000);
-    });
-}
+            if (signupModal) signupModal.style.display = 'none';
+        });
+    }
 
-// --- Modal ---
-if (btnCreateAccount) btnCreateAccount.addEventListener('click', openModal);
-if (btnOpenSignup) btnOpenSignup.addEventListener('click', (e) => {
-    e.preventDefault();
-    openModal();
-});
-if (closeModal) closeModal.addEventListener('click', closeModalAndRestoreScroll);
+    const openSignupModal = () => { if (signupModal) signupModal.style.display = 'block'; };
+    const closeSignupModal = () => { if (signupModal) signupModal.style.display = 'none'; };
 
-window.addEventListener('click', ({ target }) => {
-    if (target === signupModal) closeModalAndRestoreScroll();
-});
-document.addEventListener('keydown', ({ key }) => {
-    if (key === 'Escape' && signupModal?.style.display === 'block') closeModalAndRestoreScroll();
-});
+    if (btnCreateAccount) btnCreateAccount.addEventListener('click', openSignupModal);
+    if (btnOpenSignup) {
+        btnOpenSignup.addEventListener('click', (e) => {
+            e.preventDefault();
+            openSignupModal();
+        });
+    }
+    if (closeModalBtn) closeModalBtn.addEventListener('click', closeSignupModal);
+    window.addEventListener('click', ({ target }) => { if (target === signupModal) closeSignupModal(); });
+    document.addEventListener('keydown', ({ key }) => { if (key === 'Escape' && signupModal?.style.display === 'block') closeSignupModal(); });
 
-console.log('IfSpace - Sistema de Login e Cadastro Carregado (v1.2)');
+    // Lógica de Login
+    const loginForm = document.getElementById('loginForm');
+    console.log('Procurando loginForm:', loginForm);
 
-// --- Feed (somente se os elementos existirem) ---
-const openStoryInput = document.getElementById("openStoryInput");
-const storyInput = document.getElementById("storyInput");
-const storyFeed = document.getElementById("storyFeed");
-const videoPreview = document.getElementById("videoPreview");
+    if (loginForm) {
+        loginForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            console.log('Login submit disparado');
 
-if (openStoryInput && storyInput && storyFeed) {
-    openStoryInput.addEventListener("click", () => {
-        document.getElementById("storyInputArea").classList.toggle("hidden");
-    });
+            const emailElem = document.getElementById('email'); // Captura apenas o id="email"
+            const username = emailElem ? emailElem.value.trim() : '';
+            const passwordElem = document.getElementById('password');
+            const password = passwordElem ? passwordElem.value.trim() : '';
 
-    storyInput.addEventListener("keypress", (e) => {
-        if (e.key === "Enter") {
-            const input = e.target.value.trim();
-            if (!input) return;
+            console.log('username/email:', username);
+            console.log('password:', password);
 
-            const storyItem = document.createElement("div");
-            storyItem.classList.add("story-item");
-            const youtubeMatch = input.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/);
-            if (youtubeMatch) {
-                const videoId = youtubeMatch[1];
-                const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/0.jpg`;
-                storyItem.innerHTML = `
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <img src="${thumbnailUrl}" alt="Miniatura do vídeo" style="max-width: 120px; border-radius: 4px;" />
-                        <a href="${input}" target="_blank">${input}</a>
+            if (username === '' || password === '') {
+                alert('Preencha todos os campos!');
+                console.log('Campos vazios detectados');
+                return;
+            }
+
+            // Detecta se é ambiente local ou GitHub Pages
+            const isLocal = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
+            const redirectPath = isLocal ? 'feed.html' : '/IfSpace/feed.html';
+            console.log('Redirecionando para:', redirectPath);
+            window.location.href = redirectPath;
+        });
+    } else {
+        console.error('Formulário de login não encontrado no DOM.');
+    }
+
+    // Lógica específica da página de feed
+    if (document.querySelector('.feed-container')) {
+        const meuStoryCard = document.getElementById('meu-story');
+        const meuStoryImage = document.getElementById('meu-story-img');
+        const trocarStoryInput = document.getElementById('trocarStoryInput');
+
+        if (meuStoryCard && meuStoryImage && trocarStoryInput) {
+            meuStoryCard.addEventListener('click', () => {
+                trocarStoryInput.click();
+            });
+
+            trocarStoryInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        meuStoryImage.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        // Lógica do modal de postagem (mantida como no original)
+        const openPostPopup = document.getElementById('openPostPopup');
+        const addPhotoVideoComposer = document.getElementById('addPhotoVideoComposer');
+        const postModal = document.getElementById('postModal');
+        const closePostModal = document.getElementById('closePostModal');
+        const postTextInput = document.getElementById('postTextInput');
+        const postFileInput = document.getElementById('postFileInput');
+        const publishPostButton = document.getElementById('publishPostButton');
+        const addPhotoButton = document.getElementById('addPhotoButton');
+        const postMediaPreview = document.getElementById('postMediaPreview');
+        const postComposer = document.querySelector('.post-composer');
+        const liveVideoButton = document.querySelector('.composer-btn .fa-video')?.closest('button');
+
+        function getYoutubeId(url) {
+            const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/i;
+            return url.match(regex) ? url.match(regex)[1] : null;
+        }
+
+        function previewLink(url) {
+            if (!postMediaPreview) return;
+            postMediaPreview.innerHTML = '';
+            postMediaPreview.classList.remove('hidden');
+            const youtubeId = getYoutubeId(url);
+            if (youtubeId) {
+                postMediaPreview.innerHTML = `
+                    <div class="youtube-preview" style="position: relative; cursor: pointer; border-radius: 8px; overflow: hidden;">
+                        <img src="https://img.youtube.com/vi/${youtubeId}/mqdefault.jpg" alt="Thumbnail do YouTube" style="width: 100%; height: auto; display: block;">
+                        <i class="fab fa-youtube" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 60px; color: red;"></i>
                     </div>
                 `;
             } else {
-                storyItem.textContent = input;
+                postMediaPreview.innerHTML = `<a href="${url}" target="_blank" style="color: var(--primary-color); font-weight: 600;">Link anexado: ${url.substring(0, 50)}...</a>`;
             }
-            storyFeed.prepend(storyItem);
-            e.target.value = "";
-            if (videoPreview) videoPreview.innerHTML = "";
         }
-    });
 
-    storyInput.addEventListener("input", (e) => {
-        const input = e.target.value;
-        if (!videoPreview) return;
-        const youtubeMatch = input.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/);
-        if (youtubeMatch) {
-            const videoId = youtubeMatch[1];
-            const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/0.jpg`;
-            videoPreview.innerHTML = `<img src="${thumbnailUrl}" alt="Miniatura do vídeo" style="max-width: 120px; border-radius: 4px;" />`;
-        } else {
-            videoPreview.innerHTML = "";
+        function openPostModal() {
+            if (postModal) postModal.classList.remove('hidden');
         }
-    });
-}
 
-// --- Personalização do Feed ---
-document.addEventListener("DOMContentLoaded", function () {
-    const userName = localStorage.getItem("ifspace_user_name");
-    const profileName = document.querySelector(".profile-link span");
-    if (userName && profileName) profileName.textContent = userName;
+        function openPostModalAndFocus() {
+            if (postModal) postModal.classList.remove('hidden');
+            setTimeout(() => { if (postTextInput) postTextInput.focus(); }, 50);
+        }
 
-    const composerInput = document.querySelector(".composer-top input");
-    if (userName && composerInput) {
-        composerInput.placeholder = `O que você está pensando, ${userName}?`;
+        function closeAndResetPostModal() {
+            if (postModal) postModal.classList.add('hidden');
+            if (postTextInput) postTextInput.value = '';
+            if (postFileInput) postFileInput.value = '';
+            if (postMediaPreview) {
+                postMediaPreview.innerHTML = '';
+                postMediaPreview.classList.add('hidden');
+            }
+            if (publishPostButton) publishPostButton.disabled = true;
+        }
+
+        if (openPostPopup) openPostPopup.addEventListener('click', openPostModalAndFocus);
+        if (addPhotoVideoComposer) {
+            addPhotoVideoComposer.addEventListener('click', () => {
+                openPostModal();
+                setTimeout(() => { if (postFileInput) postFileInput.click(); }, 100);
+            });
+        }
+        if (liveVideoButton) liveVideoButton.addEventListener('click', openPostModal);
+        if (closePostModal) closePostModal.addEventListener('click', closeAndResetPostModal);
+
+        function updatePublishButton() {
+            if (!publishPostButton || !postTextInput || !postFileInput) return;
+            const textContent = postTextInput.value.trim();
+            const hasText = textContent.length > 0;
+            const hasFile = postFileInput.files.length > 0;
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            const match = textContent.match(urlRegex);
+            const hasLink = match && match.length > 0;
+
+            if (hasLink && !hasFile) previewLink(match[0]);
+            else if (!hasFile) {
+                postMediaPreview.innerHTML = '';
+                postMediaPreview.classList.add('hidden');
+            }
+            publishPostButton.disabled = !(hasText || hasFile || hasLink);
+        }
+
+        if (postTextInput) postTextInput.addEventListener('input', updatePublishButton);
+        if (postFileInput) {
+            postFileInput.addEventListener('change', (e) => {
+                if (!postMediaPreview) return;
+                postMediaPreview.innerHTML = '';
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        postMediaPreview.classList.remove('hidden');
+                        let mediaElement;
+                        if (file.type.startsWith('image/')) {
+                            mediaElement = document.createElement('img');
+                            mediaElement.src = e.target.result;
+                            mediaElement.alt = "Prévia da Imagem";
+                        } else if (file.type.startsWith('video/')) {
+                            mediaElement = document.createElement('video');
+                            mediaElement.src = e.target.result;
+                            mediaElement.controls = true;
+                            mediaElement.style.maxWidth = '100%';
+                            mediaElement.style.maxHeight = '300px';
+                            mediaElement.style.borderRadius = '8px';
+                        }
+                        if (mediaElement) postMediaPreview.appendChild(mediaElement);
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    postMediaPreview.classList.add('hidden');
+                }
+                updatePublishButton();
+            });
+        }
+
+        if (addPhotoButton) addPhotoButton.addEventListener('click', () => { if (postFileInput) postFileInput.click(); });
+        if (publishPostButton) publishPostButton.addEventListener('click', () => { createPost(); closeAndResetPostModal(); });
+
+        function createPost() {
+            const textContent = postTextInput.value.trim();
+            const file = postFileInput.files[0];
+            if (!textContent && !file) return;
+
+            const newPost = document.createElement('div');
+            newPost.className = 'post-card';
+            newPost.style.order = -1;
+
+            let mediaHtml = '';
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            const linkMatch = textContent.match(urlRegex);
+            const isYoutubePost = linkMatch && getYoutubeId(linkMatch[0]);
+
+            if (file) {
+                const mediaUrl = URL.createObjectURL(file);
+                if (file.type.startsWith('image/')) {
+                    mediaHtml = `<div class="post-body-media" style="margin-top: 10px;"><img src="${mediaUrl}" alt="Mídia do Post" style="width: 100%; height: auto;"></div>`;
+                } else if (file.type.startsWith('video/')) {
+                    mediaHtml = `<div class="post-body-media" style="margin-top: 10px;"><video controls src="${mediaUrl}" style="width: 100%; height: auto;"></video></div>`;
+                }
+            } else if (isYoutubePost) {
+                const youtubeId = getYoutubeId(linkMatch[0]);
+                mediaHtml = `
+                    <div class="post-body-media" style="position: relative; cursor: pointer; margin-top: 10px; border-radius: 8px; overflow: hidden;">
+                        <a href="https://www.youtube.com/watch?v=${youtubeId}" target="_blank">
+                            <img src="https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg" alt="Vídeo do YouTube" style="width: 100%; height: auto; display: block;">
+                            <i class="fab fa-youtube" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 80px; color: rgba(255, 0, 0, 0.8);"></i>
+                        </a>
+                    </div>
+                `;
+            }
+
+            const formattedText = textContent.replace(/\n/g, '<br>');
+            newPost.innerHTML = `
+                <div class="post-header">
+                    <img src="imagens/euPerfil.jpeg" alt="Autor">
+                    <div>
+                        <span class="post-author">Agenor Filho</span>
+                        <span class="post-time">agora mesmo · <i class="fas fa-globe-americas"></i></span>
+                    </div>
+                    <i class="fas fa-ellipsis-h post-options"></i>
+                </div>
+                <div class="post-body">
+                    ${formattedText ? `<p>${formattedText}</p>` : ''}
+                </div>
+                ${mediaHtml}
+                <div class="post-footer">
+                    <div class="post-stats">
+                        <span class="likes-count"><i class="fas fa-thumbs-up"></i> 0</span>
+                        <span class="comments-count">0 Comentários</span>
+                    </div>
+                    <div class="post-actions">
+                        <button><i class="far fa-thumbs-up"></i> Curtir</button>
+                        <button><i class="far fa-comment-alt"></i> Comentar</button>
+                        <button><i class="fas fa-share"></i> Compartilhar</button>
+                    </div>
+                </div>
+            `;
+            if (postComposer) postComposer.after(newPost);
+        }
     }
 });
-
-if (document.body.classList.contains("feed-page")) {
-    // Executa apenas se estiver na página do feed
-}
-
